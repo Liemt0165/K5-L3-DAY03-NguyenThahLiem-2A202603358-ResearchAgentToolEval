@@ -40,7 +40,6 @@ from providers import make_provider
 from tools import load_tool_declarations, to_openai_tools
 from versioning import artifact_version_dict, build_artifact_version
 
-<<<<<<< HEAD
 load_lab_env(ROOT)
 
 st.set_page_config(
