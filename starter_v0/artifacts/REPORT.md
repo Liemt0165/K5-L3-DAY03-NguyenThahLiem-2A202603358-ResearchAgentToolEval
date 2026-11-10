@@ -42,6 +42,7 @@ Research Agent thông minh đa nguồn: tự động tìm kiếm tin tức web, 
 | `paper_text` | Tải PDF và trích xuất nội dung văn bản bài báo arXiv | không |
 | `github_search` | Tìm kiếm các kho lưu trữ mã nguồn (repositories) công khai trên GitHub | **Có (Nhóm thêm ở v2)** |
 | `deduplicate` | Lọc và loại bỏ các nguồn URL trùng lặp khỏi danh sách trước khi tổng hợp bản tin | **Có (Nhóm thêm ở v2)** |
+| `weather` | Tra cứu thông tin thời tiết hiện tại (nhiệt độ, gió, trạng thái) theo địa điểm | **Có (Nhóm thêm ở v2)** |
 
 ## A3. Câu hỏi mẫu để thử
 
@@ -104,8 +105,8 @@ Trích xuất từ `starter_v0/transcripts/v3_openrouter_20261110T120636173354.t
 |---|---|---|---|
 | **send (Telegram)** | `starter_v0/tools/send/tool.py` | Kiểm tra cờ `confirmed is True` trước khi gọi mạng | Ngăn chặn hành vi tự ý gửi tin nhắn rác ra bên ngoài |
 | **UI (Streamlit)** | `starter_v0/app.py` | Giao diện chat trực quan với Tool Inspector và Sidebar | Giúp người dùng quan sát trực tiếp các bước suy luận và gọi tool |
-| **Tool mới (>1 tool)** | `tools/github_search/`, `tools/deduplicate/` | Bổ sung 2 công cụ mới hoàn chỉnh có `TOOL.md`, unit tests và test case | Tăng cường năng lực tra cứu code và xử lý dữ liệu nguồn |
-| **Tool unit tests** | `starter_v0/tests/` | **111/111 tests passed (100% xanh, 0 failed, 0 skipped)** | Đã phát hiện và sửa lỗi kiểm tra kiểu boolean trong `send/tool.py` (`if not confirmed` bị bypass nếu confirmed là string) |
+| **Tool mới (>1 tool)** | `tools/github_search/`, `tools/deduplicate/`, `tools/weather/` | Bổ sung 3 công cụ mới hoàn chỉnh có `TOOL.md`, unit tests và khai báo schema | Tăng cường năng lực tra cứu code, xử lý dữ liệu nguồn và thông tin thời tiết |
+| **Tool unit tests** | `starter_v0/tests/` | **119/119 tests passed (100% xanh, 0 failed, 0 skipped)** | Đã phát hiện và sửa lỗi kiểm tra kiểu boolean trong `send/tool.py` (`if not confirmed` bị bypass nếu confirmed là string) |
 
 ## B6. Reflection
 

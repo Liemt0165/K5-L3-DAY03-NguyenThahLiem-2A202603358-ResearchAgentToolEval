@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Agent AI20k — Poster Giới Thiệu (Part A)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --primary: #38bdf8;
+      --primary-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #34d399;
+      --accent-purple: #c084fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .poster-container {
+      width: 100%;
+      max-width: 1100px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      padding: 32px;
+      display: grid;
+      gap: 24px;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--primary-gradient);
+      color: #000;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .team-meta {
+      text-align: right;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .team-meta strong { color: var(--text); }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .team-meta { text-align: left; }
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h2 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    p { font-size: 14px; line-height: 1.6; color: #cbd5e1; }
+    .try-link {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #0f172a;
+      border-radius: 8px;
+      font-family: monospace;
+      color: var(--accent-green);
+      font-size: 13px;
+      word-break: break-all;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--text-muted); font-weight: 600; }
+    td code {
+      background: #0f172a;
+      color: var(--primary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .tag-new {
+      background: rgba(52, 211, 153, 0.2);
+      color: var(--accent-green);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .sample-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .sample-list li {
+      padding: 10px 14px;
+      background: #0f172a;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .sample-list li strong { color: var(--primary); }
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="poster-container">
+    <header>
+      <div>
+        <span class="badge">Day 03 Lab v2 — Research Agent</span>
+        <h1>AI Research Agent — Showdown Poster</h1>
+      </div>
+      <div class="team-meta">
+        <div><strong>Team:</strong> Research Agent AI20k</div>
+        <div><strong>Members:</strong> Liêm (Lead), Bình, Hường, Vy, Linh</div>
+        <div><strong>Provider:</strong> gpt-5.4 & OpenRouter</div>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>🎯 A1. Agent Này Làm Được Gì?</h2>
+      <p>Trợ lý nghiên cứu AI thông minh đa nguồn: tự động tìm kiếm tin tức web thời sự (Tavily), theo dõi bài đăng mạng xã hội Twitter/X, khám phá repository mã nguồn trên GitHub, đọc toàn văn nội dung URL (Firecrawl), lọc trùng lặp nguồn tin (Deduplicate), tổng hợp thành bản tin Markdown digest, tra cứu thời tiết và hỗ trợ gửi tin an toàn lên kênh Telegram sau khi được xác nhận Yes/No.</p>
+      <div class="try-link">🌐 Link dùng thử local: http://localhost:8501 (hoặc expose qua Cloudflare Tunnel)</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2>🛠️ A2. Danh Sách Công Cụ (13 Tools)</h2>
+        <table>
+          <thead>
+            <tr><th>Tên tool</th><th>Chức năng</th><th>Loại</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>clarify</code></td><td>Hỏi lại khi thiếu URL/handle; xin confirm Yes/No</td><td>Core</td></tr>
+            <tr><td><code>lookup</code></td><td>Tìm kiếm web & tin tức thời sự (Tavily)</td><td>Core</td></tr>
+            <tr><td><code>fetch</code></td><td>Đọc toàn văn trang web từ URL (Firecrawl)</td><td>Core</td></tr>
+            <tr><td><code>timeline</code></td><td>Lấy tweet mới nhất của tài khoản Twitter</td><td>Core</td></tr>
+            <tr><td><code>social_search</code></td><td>Tìm kiếm bài đăng Twitter theo chủ đề</td><td>Core</td></tr>
+            <tr><td><code>format</code></td><td>Định dạng bản tin Markdown digest</td><td>Core</td></tr>
+            <tr><td><code>send</code></td><td>Gửi tin Telegram (Guardrail: cần confirm)</td><td>Action</td></tr>
+            <tr><td><code>policy</code></td><td>Tra cứu chính sách & quy định nội bộ</td><td>Bonus</td></tr>
+            <tr><td><code>papers</code></td><td>Tìm bài báo khoa học trên arXiv</td><td>Bonus</td></tr>
+            <tr><td><code>github_search</code></td><td>Tìm kiếm repository công khai trên GitHub</td><td><span class="tag-new">Tool mới</span></td></tr>
+            <tr><td><code>deduplicate</code></td><td>Lọc bỏ URL trùng lặp khỏi danh sách nguồn</td><td><span class="tag-new">Tool mới</span></td></tr>
+            <tr><td><code>weather</code></td><td>Tra cứu thời tiết thời gian thực theo địa điểm</td><td><span class="tag-new">Tool mới</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>🧪 A3. Câu Hỏi Mẫu Để Thử Trực Tiếp</h2>
+        <ul class="sample-list">
+          <li><strong>1. Tin tức Web:</strong><br><em>"Tìm tin tức AI hôm nay có gì nổi bật trên web?"</em><br>👉 Agent gọi <code>lookup(query='AI', topic='news', timeframe='day')</code></li>
+          <li><strong>2. Đọc & Tóm tắt Link:</strong><br><em>"Tóm tắt bài viết này giúp mình: https://openai.com/blog/gpt-5"</em><br>👉 Agent gọi <code>fetch</code> đọc URL và tóm tắt</li>
+          <li><strong>3. An Toàn Trước Khi Gửi:</strong><br><em>"Đăng bản tin tóm tắt này lên Telegram giúp mình"</em><br>👉 Agent KHÔNG tự gửi, hỏi lại xác nhận <code>clarify(yes_no)</code></li>
+          <li><strong>4. Tìm Kho Mã Nguồn:</strong><br><em>"Tìm 5 repository GitHub phổ biến nhất về topic AI agent evaluation"</em><br>👉 Agent gọi tool mới <code>github_search</code></li>
+          <li><strong>5. Xử Lý Khi Thiếu Link:</strong><br><em>"Tóm tắt bài viết này cho mình nhé"</em> (chưa có link)<br>👉 Agent lịch sự hỏi link URL, cấm tự bịa đặt</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <div>⚡ Unit Tests: <strong>119/119 PASSED (100% xanh)</strong></div>
+      <div>🎯 Case Accuracy: <strong>95% - 100%</strong> across v1, v2, v3</div>
+      <div>🔒 Safety: Guardrail xác nhận bắt buộc trước khi gửi tin</div>
+    </footer>
+  </div>
+</body>
+</html>

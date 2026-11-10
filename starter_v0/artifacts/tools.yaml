@@ -152,3 +152,11 @@ tools:
               source: {type: string}
             required: [url]
       required: [items]
+
+  - name: weather
+    description: "Tra cứu thông tin thời tiết hiện tại tại một địa điểm hoặc thành phố cụ thể."
+    parameters:
+      type: object
+      properties:
+        location: {type: string, default: "", description: "Tên thành phố hoặc địa điểm cần xem thời tiết (ví dụ: 'Hanoi', 'Tokyo', 'London')"}
+      required: [location]
