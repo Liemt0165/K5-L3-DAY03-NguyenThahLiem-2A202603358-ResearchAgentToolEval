@@ -160,8 +160,23 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 
 ### NguyenDieuVy-2A202603381
 
-*(Thành viên tự điền phần việc và đóng góp cụ thể của mình tại đây)*
+**Phần việc phụ trách:**
+- Tinh chỉnh `artifacts/system_prompt.md` cho v3 trên nền v2 của Hường: khi thiếu thông tin thì gọi `clarify` để hỏi lại, không tự đoán tài khoản hoặc URL; trước khi gửi/đăng phải xác nhận bằng `clarify(response_type="yes_no")`.
+- Chạy đánh giá v3 trên base suite và group suite, ghi lại kết quả và các lỗi còn lại.
 
+**Đóng góp cụ thể:**
+- Sửa 2 dòng trong system prompt (prompt hash `p49b5ac95a025`), giữ nguyên bộ tool của Hường (`t3050abf7e952`).
+- Base suite (20 case): 0.95 (19/20), 2 lần chạy đều cho kết quả này. Lỗi còn lại: `R12_confirm_before_send` (wrong_boundary).
+- Group suite (10 case): lần 1 đạt 0.90 (9/10, G10 gọi thừa `social_search`); lần 2 đạt 1.0 (10/10). Cùng prompt nhưng kết quả khác nhau ở G10, nên ghi cả hai lần.
+- Kết quả dùng model gpt-4o-mini qua OpenAI, không so trực tiếp với các nhánh chạy model hoặc provider khác.
+
+**Bằng chứng:**
+- `starter_v0/artifacts/system_prompt.md`
+- `starter_v0/runs/v3_B_base_openai_20261110T214456724367.json`, `starter_v0/runs/v3_B_base_openai_20261110T215537300312.json`
+- `starter_v0/runs/v3_B_group_openai_20261110T214537143749.json`, `starter_v0/runs/v3_B_group_openai_20261110T214756258585.json`
+- Pytest trên branch dv-v3: 109 passed, 0 failed.
+
+**Điều mình học được:** Một lần chạy eval chưa đủ để kết luận. Cùng một prompt có thể cho kết quả khác nhau ở một case, nên phải ghi cả các lần chạy thay vì chọn lần đẹp. Lỗi R12 có thể không hoàn toàn là lỗi prompt, vì câu hỏi thiếu nội dung bản tin, nên model hỏi lại nội dung là hợp lý.
 ---
 
 ### ManhLinh - 2A202603539
