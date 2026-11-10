@@ -153,7 +153,6 @@ def test_send_non_boolean_confirmation_never_calls_network(monkeypatch, fake_htt
     assert result["status"] == "needs_confirmation"
     assert calls == []
 
-
 # ---------------- weather (tool mới) ----------------
 
 def test_weather_happy_path(fake_http) -> None:

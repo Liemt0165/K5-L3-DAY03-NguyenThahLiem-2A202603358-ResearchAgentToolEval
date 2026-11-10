@@ -1,0 +1,17 @@
+{
+  "dataset_id": "deduplicate_smoke",
+  "dataset_role": "group",
+  "description": "Kiểm tra riêng tool mới sau v1; không thay thế 10 case nhóm của mốc v2.",
+  "cases": [
+    {
+      "id": "D01_deduplicate_existing_sources",
+      "phase": "B",
+      "query": "Chỉ lọc URL trùng trong danh sách này, giữ metadata item đầu tiên, không tìm thêm nguồn và chưa cần tổng hợp: [{\"url\":\"https://example.com/a?utm_source=x\",\"title\":\"First\"},{\"url\":\"https://example.com/a\",\"title\":\"Second\"}]",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [{"name": "deduplicate", "args": {"items": [{"url": "https://example.com/a?utm_source=x", "title": "First"}, {"url": "https://example.com/a", "title": "Second"}]}}]
+      },
+      "metadata": {"what_it_tests": "Route tới tool deduplicate khi có dữ liệu sẵn và yêu cầu bỏ URL trùng; giữ nguyên args thay vì tự lọc trước."}
+    }
+  ]
+}

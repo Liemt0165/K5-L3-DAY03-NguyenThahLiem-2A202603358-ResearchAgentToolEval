@@ -1,0 +1,22 @@
+[
+  {
+    "tool": "timeline",
+    "http_status": 200,
+    "message": null,
+    "returned_items": 20
+  },
+  {
+    "tool": "social_search",
+    "http_status": 429,
+    "message": "Too many requests",
+    "returned_items": 0
+  },
+  {
+    "sequential_retry": {
+      "tool": "social_search",
+      "ok": true,
+      "item_count": 1,
+      "error": null
+    }
+  }
+]

@@ -1,4 +1,4 @@
-# Team
+﻿# Team
 
 Nhóm điền phần **Thông tin nhóm** và **Thành viên**. Mỗi người tự điền phần của mình trong **Cá nhân**.
 
@@ -117,7 +117,44 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 
 ### DinhThiHuong-2A202603569
 
-*(Thành viên tự điền phần việc và đóng góp cụ thể của mình tại đây)*
+**Phần việc phụ trách:** Tự viết tool `deduplicate`, bổ sung kiểm thử/eval cho v2, cải tiến prompt và giao diện Streamlit cho v3.
+
+**Đóng góp cụ thể:**
+
+1. **Tự viết tool mới `deduplicate` cho v2**
+   - Tự triển khai `starter_v0/tools/deduplicate/tool.py` để loại bỏ các nguồn có URL trùng, giữ lại item đầu tiên và giữ nguyên metadata.
+   - Chuẩn hóa URL khi so sánh: bỏ fragment, các tracking parameter như `utm_*`, `fbclid`, `gclid`, chuẩn hóa host, port mặc định và thứ tự query.
+   - Bổ sung `TOOL.md`, đăng ký tool trong `tools/__init__.py` và khai báo schema/routing trong `artifacts/tools.yaml`.
+   - Xử lý input không hợp lệ bằng error dictionary, không trả partial result và không gọi network.
+
+2. **Bổ sung kiểm thử và eval cho v2**
+   - Viết test cho các trường hợp URL trùng, tracking parameter, fragment, query khác nhau, input lỗi, không sửa input và idempotency tại `tests/test_deduplicate.py`.
+   - Bổ sung 10 eval case trong `data/eval_group.json`, gồm 5 single-turn và 5 multi-turn, trong đó có các case định tuyến tới `deduplicate`.
+   - Chạy toàn bộ offline test suite đạt **109 passed, 0 failed, 0 skipped**.
+   - Chạy eval v2 đạt **19/20 (95%)** trên base suite và **9/10 (90%)** trên group suite.
+
+3. **Cải tiến prompt và hoàn thiện v3**
+   - Bổ sung guardrail để khi thiếu tài khoản X phải gọi `clarify`, không đoán tài khoản và không dùng nhầm `social_search`.
+   - Bổ sung quy tắc multi-turn: ưu tiên intent mới nhất, chỉ gọi số tool tối thiểu và không gọi `timeline` cho topic như `robotics` hoặc `AI`.
+   - Làm rõ flow Telegram: thiếu draft thì xin draft trước, sau đó mới hỏi xác nhận `yes_no`.
+   - Kết quả v3 đạt **20/20 (100%)** trên base suite và **10/10 (100%)** trên group suite.
+
+4. **Cải tiến giao diện demo**
+   - Nâng cấp `starter_v0/app.py` để người dùng chọn artifact version `v1`, `v2` hoặc `v3` trên sidebar.
+   - Hiển thị version, model, số lượng tool và artifact hash đang sử dụng.
+   - Transcript lưu version/hash tương ứng, hỗ trợ tải transcript JSON và bắt đầu cuộc trò chuyện mới khi đổi version.
+
+**Bằng chứng:**
+- Tool: `starter_v0/tools/deduplicate/tool.py`, `starter_v0/tools/deduplicate/TOOL.md`.
+- Khai báo và đăng ký: `starter_v0/artifacts/tools.yaml`, `starter_v0/tools/__init__.py`.
+- Unit tests: `starter_v0/tests/test_deduplicate.py`, `starter_v0/tests/test_tools_todo.py`.
+- Eval group: `starter_v0/data/eval_group.json`.
+- Prompt/UI: `starter_v0/artifacts/system_prompt.md`, `starter_v0/app.py`.
+- Phân tích và version log: `starter_v0/artifacts/V2_ANALYSIS.md`, `starter_v0/artifacts/V3_ANALYSIS.md`, `starter_v0/artifacts/version_log.csv`.
+- Run v2: `starter_v0/runs/v2_B_base_openai_20261110T113149088094.json`, `starter_v0/runs/v2_B_group_openai_20261110T112504513008.json`.
+- Run v3: `starter_v0/runs/v3_B_base_openai_20261110T124518116114.json`, `starter_v0/runs/v3_B_group_openai_20261110T124432527353.json`.
+
+**Điều mình học được:** Hiểu rõ cách phát triển agent theo hướng evidence-driven: mỗi thay đổi prompt hoặc tool declaration cần được kiểm chứng bằng log eval. Đồng thời nắm được cách thiết kế một tool local an toàn, duy trì contract giữa schema và implementation, cũng như cách dùng multi-turn guardrail để tránh gọi tool dư hoặc suy đoán dữ liệu người dùng chưa cung cấp.
 
 ---
 
