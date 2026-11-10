@@ -12,11 +12,11 @@ Nhóm điền phần **Thông tin nhóm** và **Thành viên**. Mỗi người t
 
 | STT | Họ và tên | MSSV | Vai trò trong nhóm | Tài khoản GitHub |
 |---:|---|---|---|---|
-| 1 | Nguyễn Thành Liêm | 2A202603358 | Nhóm trưởng, Prompt & Tooling, Merge & Release | Liemt0165 |
-| 2 | Dương Thanh Bình | 2A202603531 | Phát triển Tool GitHub Search, Xây dựng UI Streamlit, Eval | BinhThanh313 |
-| 3 | Đinh Thị Hường | 2A202603569 | Phát triển Tool Deduplicate, Phân tích routing v3 | dihnhuonq130104 |
-| 4 | Nguyễn Diệu Vy | 2A202603381 | Thành viên nhóm | *(tự điền)* |
-| 5 | Mạnh Linh | *(tự điền)* | Thành viên nhóm | *(tự điền)* |
+| 1 | Nguyễn Thành Liêm | 2A202603358 | Nhóm trưởng | Liemt0165 |
+| 2 | Dương Thanh Bình | 2A202603531 | Thành viên nhóm | BinhThanh313 |
+| 3 | Đinh Thị Hường | 2A202603569 | Thành viên nhóm | dihnhuonq130104 |
+| 4 | Nguyễn Diệu Vy | 2A202603381 | Thành viên nhóm | dieuvy2912 |
+| 5 | Mạnh Linh | 2A202603539 | Thành viên nhóm | manhlinh46 |
 
 Không ghi email hay số điện thoại vào bảng này, vì repo có thể để public.
 
@@ -48,7 +48,7 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 - Thư mục tool: `starter_v0/tools/weather/` (`tool.py`, `TOOL.md`).
 - Khai báo & Prompt: `starter_v0/artifacts/system_prompt.md`, `starter_v0/artifacts/tools.yaml`.
 - Báo cáo & Poster: `starter_v0/artifacts/REPORT.md`, `starter_v0/artifacts/poster.html`.
-- File run log thực nghiệm: `starter_v0/runs/v0_B_base_openai_20261110T100441663938.json`, `starter_v0/runs/v1_B_base_openai_20261110T104801876153.json`, `starter_v0/runs/v3_B_base_openai_20261110T144630583026.json`.
+- File run log thực nghiệm: `starter_v0/runs/v0_B_base_openai_20261110T100441663938.json`, `starter_v0/runs/v1_B_base_openai_20261110T104801876153.json`,
 - Unit tests: `starter_v0/tests/test_tools_todo.py` (119/119 pass).
 - Các commit trên nhánh `ntl`, `team-merged` và `main`.
 
@@ -76,7 +76,7 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 
 ---
 
-### ManhLinh
+### ManhLinh - 2A202603539
 
 *(Thành viên tự điền MSSV, phần việc và đóng góp cụ thể của mình tại đây)*
 
