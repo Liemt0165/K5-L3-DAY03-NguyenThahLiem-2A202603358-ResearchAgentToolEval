@@ -115,24 +115,6 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 
 ---
 
-## 4. Bảng tóm tắt các file đã đóng góp / chỉnh sửa trong Repo
-
-| File / Thư mục | Loại đóng góp | Mô tả chi tiết |
-| :--- | :--- | :--- |
-| `starter_v0/tools/github_search/TOOL.md` | Tạo mới | Đặc tả công cụ tìm kiếm GitHub repository (`github_search`). |
-| `starter_v0/tools/github_search/tool.py` | Tạo mới | Code thực thi gọi GitHub Search API kèm cơ chế fallback offline. |
-| `starter_v0/tools/__init__.py` | Chỉnh sửa & Merge | Đăng ký `github_search` và hợp nhất cùng `deduplicate` (tổng 12 tools). |
-| `starter_v0/artifacts/system_prompt.md` | Chỉnh sửa & Merge | Tối ưu qua các vòng `v1`, `v3`, `v3.1` (sửa lỗi `R12`, `M06`, định tuyến 12 tools). |
-| `starter_v0/artifacts/tools.yaml` | Chỉnh sửa & Merge | Chuẩn hóa schema & quy ước tham số ở `v2`, tích hợp `github_search` và `deduplicate` ở `v3`. |
-| `starter_v0/data/eval_group.json` | Tạo mới & Merge | Đóng góp 10 cases `github_search` và hợp nhất với 10 cases `deduplicate` (tổng 20 cases). |
-| `starter_v0/tests/test_tools_todo.py` | Chỉnh sửa | Viết đầy đủ 18 unit tests (xóa toàn bộ `pytest.skip`), giúp bộ test đạt 117 passed. |
-| `starter_v0/artifacts/version_log.csv` | Chỉnh sửa & Merge | Ghi nhận lịch sử tiến hóa từ `v0` → `v1` → `v2` → `v3` → `v3.1` của cả nhóm. |
-| `starter_v0/app.py` | Chỉnh sửa | Nâng cấp giao diện Streamlit hỗ trợ chọn/so sánh `v0`–`v3` và xem bảng điểm Eval. |
-| `starter_v0/transcripts/*.transcript.json` | Tạo mới | Lưu log hội thoại thực tế chạy trên giao diện demo. |
-| `starter_v0/runs/*.json` | Tạo mới | Các file kết quả benchmark từ `v0` đến `v3.1` (Base 20/20, Group 20/20). |
-
----
-
 ### DinhThiHuong-2A202603569
 
 *(Thành viên tự điền phần việc và đóng góp cụ thể của mình tại đây)*
