@@ -1,0 +1,1371 @@
+{
+  "run_id": "v2_B_base_openrouter_20261110T115641062635",
+  "version": "v2",
+  "artifact_version": "v2+p9631bed0524e+tae48912ccd3f",
+  "prompt_hash": "9631bed0524e505ad588e4681fa841a246e5d848d6e103531fa129bba872b376",
+  "tools_hash": "ae48912ccd3f5b94396112f61295ec68fd754c5642694ee1eee5c770da731306",
+  "phase": "B",
+  "suite": "base",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "D:\\VinAI20K\\K5-L3-DAY03-NguyenThahLiem-2A202603358-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\VinAI20K\\K5-L3-DAY03-NguyenThahLiem-2A202603358-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-10T11:56:41",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_github_search_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_github_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm repo mã nguồn mở trên GitHub → gọi tool mới github_search với sort=stars."
+      },
+      "input": "Tìm giúp mình các repo GitHub mã nguồn mở nhiều sao nhất về MCP server.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "sort": "stars"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "query": "MCP server",
+              "sort": "stars",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_search",
+          "args": {
+            "query": "MCP server",
+            "sort": "stars",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "MCP server",
+            "sort": "stars",
+            "total_count": 186949,
+            "items": [
+              {
+                "title": "punkpeye/awesome-mcp-servers",
+                "url": "https://github.com/punkpeye/awesome-mcp-servers",
+                "source": "github.com",
+                "summary": "A collection of MCP servers.",
+                "stars": 97545,
+                "forks": 19598,
+                "language": null,
+                "updated_at": "2026-11-10T04:23:19Z",
+                "topics": [
+                  "ai",
+                  "mcp"
+                ]
+              },
+              {
+                "title": "headroomlabs-ai/headroom",
+                "url": "https://github.com/headroomlabs-ai/headroom",
+                "source": "github.com",
+                "summary": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95% fewer tokens for JSON, same answers. Library, proxy, MCP server.",
+                "stars": 79263,
+                "forks": 6197,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:36:18Z",
+                "topics": [
+                  "agent",
+                  "ai",
+                  "anthropic",
+                  "claude-code",
+                  "compression",
+                  "context-engineering",
+                  "context-window",
+                  "cursor",
+                  "fastapi",
+                  "langchain",
+                  "llm",
+                  "mcp",
+                  "openai",
+                  "prompt-engineering",
+                  "proxy",
+                  "python",
+                  "rag",
+                  "token-optimization",
+                  "tokens",
+                  "typescript"
+                ]
+              },
+              {
+                "title": "zylon-ai/private-gpt",
+                "url": "https://github.com/zylon-ai/private-gpt",
+                "source": "github.com",
+                "summary": "Complete API layer for private AI applications on local models: RAG, skills, tools, MCP, text-to-sql, and more. Works with any OpenAI-compatible inference server.",
+                "stars": 57631,
+                "forks": 7629,
+                "language": "Python",
+                "updated_at": "2026-11-10T02:50:30Z",
+                "topics": [
+                  "ai",
+                  "ai-tools",
+                  "on-premise"
+                ]
+              },
+              {
+                "title": "microsoft/playwright-mcp",
+                "url": "https://github.com/microsoft/playwright-mcp",
+                "source": "github.com",
+                "summary": "Playwright MCP server",
+                "stars": 39393,
+                "forks": 3413,
+                "language": "TypeScript",
+                "updated_at": "2026-11-10T04:38:49Z",
+                "topics": [
+                  "mcp",
+                  "playwright"
+                ]
+              },
+              {
+                "title": "DayuanJiang/next-ai-draw-io",
+                "url": "https://github.com/DayuanJiang/next-ai-draw-io",
+                "source": "github.com",
+                "summary": "Draw and edit draw.io diagrams by chatting with an AI. Web app, desktop app, and an MCP server for Claude Code, Cursor, Codex and VS Code.",
+                "stars": 36840,
+                "forks": 3843,
+                "language": "TypeScript",
+                "updated_at": "2026-11-10T03:45:15Z",
+                "topics": [
+                  "ai",
+                  "architecture-diagram",
+                  "claude-code",
+                  "deepseek-harness",
+                  "diagram-generator",
+                  "diagrams",
+                  "draw-io",
+                  "drawio",
+                  "dsh-plugin",
+                  "electron",
+                  "flowchart",
+                  "gemini-cli-extension",
+                  "llm",
+                  "mcp",
+                  "mcp-server",
+                  "nextjs"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_ylecun_handle_mapping",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "name_to_handle_ylecun",
+        "difficulty": "medium",
+        "what_it_tests": "Map tên Yann LeCun thành handle ylecun (không có @) và limit=3."
+      },
+      "input": "Lấy 3 tweet mới nhất của Yann LeCun",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "ylecun",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "ylecun",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "ylecun",
+            "limit": 3
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "ylecun",
+            "items": [
+              {
+                "title": "RT @randall_balestr: Our first major update on https://t.co/v8KSoNBKqM",
+                "summary": "RT @randall_balestr: Our first major update on https://t.co/v8KSoNBKqM\n- venue confirmed in the heart of Manhattan\n- paper deadline is Dece…",
+                "url": "https://x.com/ylecun/status/2119929780057375160",
+                "source": "@ylecun",
+                "date": "Mon Nov 09 23:07:00 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 20,
+                  "views": "3423"
+                }
+              },
+              {
+                "title": "RT @ylecun: @TimDarcet @gabriberton The P in JEPA stands for predictive.",
+                "summary": "RT @ylecun: @TimDarcet @gabriberton The P in JEPA stands for predictive.\nThe main distinction is not between JEA and JEPA, but between Join…",
+                "url": "https://x.com/ylecun/status/2119522897555595583",
+                "source": "@ylecun",
+                "date": "Sun Nov 08 20:10:12 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 66,
+                  "views": null
+                }
+              },
+              {
+                "title": "RT @TheTuringPost: There's one great example that shows how physics can help upgrade AI world models, and it's LeHami.",
+                "summary": "RT @TheTuringPost: There's one great example that shows how physics can help upgrade AI world models, and it's LeHami.\n\n@ylecun, @randall_b…",
+                "url": "https://x.com/ylecun/status/2119482154715349117",
+                "source": "@ylecun",
+                "date": "Sun Nov 08 17:28:18 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 47,
+                  "views": "5071"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_month_timeframe_news",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_timeframe_month",
+        "difficulty": "medium",
+        "what_it_tests": "'trong tháng này' + 'tin tức' → lookup với query='Anthropic', topic='news', timeframe='month'."
+      },
+      "input": "Tin tức về Anthropic trong tháng này có gì đáng chú ý?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Anthropic",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Anthropic",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "Anthropic",
+            "topic": "news",
+            "timeframe": "month"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "Anthropic",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Anthropic",
+                "url": "https://tavily.com/knowledge/company/49NlR6zHvu8c",
+                "source": "tavily.com",
+                "summary": "# Anthropic\nID: 49NlR6zHvu8c\nWebsite: www.anthropic.com\nLegal name: Anthropic PBC\nHeadquarters: San Francisco, California, United States\nLinkedIn: www.linkedin.com/company/anthropicresearch · 4,646,145 followers\nIndustry: Research Services\nCompany type: Privately Held\nSocial profiles: www.facebook.com/anthropicai, www.facebook.com/anthropicai/?ref=py_c, www.twitter.com/anthropicai, www.crunchbase.com/organization/anthropic, www.instagram.com/anthropicai, www.youtube.com/@anthropic-ai [...] Email: support@anthropic.com\nDescription: Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.",
+                "score": 0.8941352
+              },
+              {
+                "title": "Anthropic update on independent evaluators \\ Anthropic",
+                "url": "https://www.anthropic.com/news/an-update-on-independent-evaluators",
+                "source": "anthropic.com",
+                "summary": "Freedom to publish observations and assessmentsof a model or a process. [...] Expertise in assessing the capabilities of frontier models, including understanding the way evaluations can go wrong, such as alignment faking.\n Independence: they shouldn’t hold equity in the company they’re evaluating, or be financially or operationally dependent on it.\n Enough access to meaningfully evaluate risks. Beyond access to the latest models, evaluators also need visibility into how those models were trained, into how our safeguards function, and more. [...] We’ve onboarded six METR employees with company hardware, office space, and access to internal tools and systems that are roughly on par with what our own risk assessment teams have access to. Outside a small number of clearly defined categories (e.g., data about customers, attorney-client privileged information, or information about our model architectures), Anthropic employees are encouraged to share information with them just as they would with a fellow employee working on alignment risk.1",
+                "score": 0.7163977
+              },
+              {
+                "title": "AI models may be capable of self-replicating without access to a datacenter \\ Anthropic",
+                "url": "https://www.anthropic.com/research/self-replicating-ai",
+                "source": "anthropic.com",
+                "summary": "1. Being above a certain threshold of capability for spreading onto a novel, unseen piece of hardware (or software environment, or network type).\n2. Once seen, adapting to the type of environment it has landed in (it should replicate more reliably on hardware it has seen before). [...] an initial defense against a weight-based replicator. Eliminating the replicator completely would mean coordinating across every ISP with an infected network, which is difficult.",
+                "score": 0.6912478
+              },
+              {
+                "title": "Investing in the public benefit",
+                "url": "https://www.anthropic.com/news/public-benefit-fund",
+                "source": "anthropic.com",
+                "summary": "### Our mission\n\nAnthropic is a Public Benefit Corporation. Our mission is to ensure the world safely makes the transition through transformative AI.\n\n### Log in\n\n   Claude.ai\n   Claude console\n\n© 2026 Anthropic PBC\n\n   [](\n   [](\n   []( [...] This builds on commitments our co-founders and employees have already made. When Anthropic was founded, our co-founders pledged to donate 80% of their equity holdings, and since founding we have also operated an equity donation match program that allows employees to pledge equity which Anthropic matches. Approximately half of our employees participate in this program. When combined with today’s announcement, roughly 20% of Anthropic shares will be dedicated to the public good, plus any",
+                "score": 0.68798697
+              },
+              {
+                "title": "How Claude designed protein binders against scorpion neurotoxins \\ Anthropic",
+                "url": "https://www.anthropic.com/research/claude-scorpion-toxin-binder-design",
+                "source": "anthropic.com",
+                "summary": "extraordinary tools to develop molecules that can become real drugs, ones that are safe, affordable, and widely accessible. [...] One way to find out whether two molecules (e.g., an antibody and a miniprotein) bind the same site on a target is with a competition experiment, which tests whether both binders can attach to the target at the same time. If the presence of one molecule reduces the other molecule’s binding, then they likely compete for the same binding site.",
+                "score": 0.67706895
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi nấu ăn ngoài phạm vi AI/tech research → không gọi tool nào."
+      },
+      "input": "Chỉ mình công thức nấu phở bò Hà Nội chuẩn vị với.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Dưới đây là công thức nấu phở bò Hà Nội chuẩn vị:\n\n### Nguyên liệu:\n1. **Nước dùng:**\n   - 2-3 kg xương bò (xương ống, xương đuôi)\n   - 1 củ hành tây\n   - 1 củ gừng\n   - 2-3 thanh quế\n   - 3-4 hoa hồi\n   - 1-2 nhánh thảo quả\n   - Muối, đường, nước mắm\n\n2. **Thịt bò:**\n   - 500g thịt bò (thịt bắp, thịt gầu hoặc thịt tái)\n   - 1-2 miếng thịt bò viên (tuỳ chọn)\n\n3. **Bánh phở:**\n   - 500g bánh phở tươi\n\n4. **Rau ăn kèm:**\n   - Húng quế\n   - Giá sống\n   - Chanh\n   - Ớt tươi\n\n### Cách làm:\n\n1. **Nấu nước dùng:**\n   - Rửa sạch xương bò, sau đó chần qua nước sôi để loại bỏ tạp chất.\n   - Cho xương vào nồi lớn, đổ nước ngập xương và đun sôi. Sau khi sôi, hạ lửa nhỏ và hớt bọt.\n   - Nướng hành tây và gừng trên lửa cho đến khi có mùi thơm, sau đó cho vào nồi nước dùng.\n   - Thêm quế, hoa hồi, thảo quả vào nồi. Nêm muối, đường, nước mắm cho vừa ăn.\n   - Đun nước dùng trong khoảng 4-6 giờ để xương tiết ra chất ngọt.\n\n2. **Chuẩn bị thịt bò:**\n   - Thịt bò rửa sạch, thái lát mỏng (nếu dùng thịt tái).\n   - Nếu dùng thịt gầu, có thể luộc sơ qua nước dùng rồi thái lát.\n\n3. **Luộc bánh phở:**\n   - Đun nước sôi, cho bánh phở vào luộc khoảng 2-3 phút cho mềm, sau đó vớt ra để ráo.\n\n4. **Hoàn thành:**\n   - Cho bánh phở vào tô, xếp thịt bò lên trên, sau đó chan nước dùng nóng lên.\n   - Trang trí với rau húng quế, giá sống, thêm chanh và ớt tươi theo khẩu vị.\n\n### Thưởng thức:\nPhở bò Hà Nội thường được ăn kèm với nước chấm và các loại rau sống. Chúc bạn thành công và có bữa ăn ngon miệng!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_parallel_github_and_papers",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_papers_and_github",
+        "difficulty": "hard",
+        "what_it_tests": "Yêu cầu tìm cả paper arXiv lẫn repo GitHub → gọi song song papers và github_search."
+      },
+      "input": "Tìm paper arXiv về GraphRAG và tìm luôn repo GitHub về GraphRAG.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {}
+          },
+          {
+            "name": "github_search",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "GraphRAG",
+              "max_results": 5
+            }
+          },
+          {
+            "name": "github_search",
+            "args": {
+              "query": "GraphRAG",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "papers",
+          "args": {
+            "query": "GraphRAG",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "GraphRAG",
+            "api_query": "all:GraphRAG",
+            "total_results": 273,
+            "items": [
+              {
+                "arxiv_id": "2501.14050v4",
+                "title": "GraphRAG under Fire",
+                "summary": "GraphRAG advances retrieval-augmented generation (RAG) by structuring external knowledge as multi-scale knowledge graphs, enabling language models to integrate both broad context and granular details in their generation. While GraphRAG has demonstrated success across domains, its security implications remain largely unexplored. To bridge this gap, this work examines GraphRAG's vulnerability to poisoning attacks, uncovering an intriguing security paradox: existing RAG poisoning attacks are less effective under GraphRAG than conventional RAG, due to GraphRAG's graph-based indexing and retrieval; yet, the same features also create new attack surfaces. We present GragPoison, a novel attack that exploits shared relations in the underlying knowledge graph to craft poisoning text capable of compromising multiple queries simultaneously. GragPoison employs three key strategies: (i) relation injection to introduce false knowledge, (ii) relation enhancement to amplify poisoning influence, and (iii) narrative generation to embed malicious content within coherent text. Empirical evaluation across diverse datasets and models shows that GragPoison substantially outperforms existing attacks in terms of effectiveness (up to 98% success rate) and scalability (using less than 68% poisoning text) on multiple variations of GraphRAG. We also explore potential defensive measures and their limitations, identifying promising directions for future research.",
+                "authors": [
+                  "Jiacheng Liang",
+                  "Yuhui Wang",
+                  "Changjiang Li",
+                  "Rongyi Zhu",
+                  "Tanqiu Jiang",
+                  "Neil Gong",
+                  "Ting Wang"
+                ],
+                "published": "2025-01-23T19:33:16Z",
+                "updated": "2025-10-14T03:06:06Z",
+                "url": "http://arxiv.org/abs/2501.14050v4",
+                "pdf_url": "https://arxiv.org/pdf/2501.14050v4",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.AI",
+                  "cs.CR"
+                ]
+              },
+              {
+                "arxiv_id": "2501.00309v2",
+                "title": "Retrieval-Augmented Generation with Graphs (GraphRAG)",
+                "summary": "Retrieval-augmented generation (RAG) is a powerful technique that enhances downstream task execution by retrieving additional information, such as knowledge, skills, and tools from external sources. Graph, by its intrinsic \"nodes connected by edges\" nature, encodes massive heterogeneous and relational information, making it a golden resource for RAG in tremendous real-world applications. As a result, we have recently witnessed increasing attention on equipping RAG with Graph, i.e., GraphRAG. However, unlike conventional RAG, where the retriever, generator, and external data sources can be uniformly designed in the neural-embedding space, the uniqueness of graph-structured data, such as diverse-formatted and domain-specific relational knowledge, poses unique and significant challenges when designing GraphRAG for different domains. Given the broad applicability, the associated design challenges, and the recent surge in GraphRAG, a systematic and up-to-date survey of its key concepts and techniques is urgently desired. Following this motivation, we present a comprehensive and up-to-date survey on GraphRAG. Our survey first proposes a holistic GraphRAG framework by defining its key components, including query processor, retriever, organizer, generator, and data source. Furthermore, recognizing that graphs in different domains exhibit distinct relational patterns and require dedicated designs, we review GraphRAG techniques uniquely tailored to each domain. Finally, we discuss research challenges and brainstorm directions to inspire cross-disciplinary opportunities. Our survey repository is publicly maintained at https://github.com/Graph-RAG/GraphRAG/.",
+                "authors": [
+                  "Haoyu Han",
+                  "Yu Wang",
+                  "Harry Shomer",
+                  "Kai Guo",
+                  "Jiayuan Ding",
+                  "Yongjia Lei",
+                  "Mahantesh Halappanavar",
+                  "Ryan A. Rossi",
+                  "Subhabrata Mukherjee",
+                  "Xianfeng Tang",
+                  "Qi He",
+                  "Zhigang Hua",
+                  "Bo Long",
+                  "Tong Zhao",
+                  "Neil Shah",
+                  "Amin Javari",
+                  "Yinglong Xia",
+                  "Jiliang Tang"
+                ],
+                "published": "2024-12-31T06:59:35Z",
+                "updated": "2025-01-08T05:16:25Z",
+                "url": "http://arxiv.org/abs/2501.00309v2",
+                "pdf_url": "https://arxiv.org/pdf/2501.00309v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.IR",
+                "categories": [
+                  "cs.IR",
+                  "cs.CL",
+                  "cs.LG"
+                ]
+              },
+              {
+                "arxiv_id": "2604.09666v1",
+                "title": "Do We Still Need GraphRAG? Benchmarking RAG and GraphRAG for Agentic Search Systems",
+                "summary": "Retrieval-augmented generation (RAG) and its graph-based extensions (GraphRAG) are effective paradigms for improving large language model (LLM) reasoning by grounding generation in external knowledge. However, most existing RAG and GraphRAG systems operate under static or one-shot retrieval, where a fixed set of documents is provided to the LLM in a single pass. In contrast, recent agentic search systems enable dynamic, multi-round retrieval and sequential decision-making during inference, and have shown strong gains when combined with vanilla RAG by introducing implicit structure through interaction. This progress raises a fundamental question: can agentic search compensate for the absence of explicit graph structure, reducing the need for costly GraphRAG pipelines? To answer this question, we introduce RAGSearch, a unified benchmark that evaluates dense RAG and representative GraphRAG methods as retrieval infrastructures under agentic search. RAGSearch covers both training-free and training-based agentic inference across multiple question answering benchmarks. To ensure fair and reproducible comparison, we standardize the LLM backbone, retrieval budgets, and inference protocols, and report results on full test sets. Beyond answer accuracy, we report offline preprocessing cost, online inference efficiency, and stability. Our results show that agentic search substantially improves dense RAG and narrows the performance gap to GraphRAG, particularly in RL-based settings. Nevertheless, GraphRAG remains advantageous for complex multi-hop reasoning, exhibiting more stable agentic search behavior when its offline cost is amortized. Together, these findings clarify the complementary roles of explicit graph structure and agentic search, and provide practical guidance on retrieval design for modern agentic RAG systems.",
+                "authors": [
+                  "Dongzhe Fan",
+                  "Zheyi Xue",
+                  "Siyuan Liu",
+                  "Qiaoyu Tan"
+                ],
+                "published": "2026-04-01T07:21:32Z",
+                "updated": "2026-04-01T07:21:32Z",
+                "url": "http://arxiv.org/abs/2604.09666v1",
+                "pdf_url": "https://arxiv.org/pdf/2604.09666v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.IR",
+                "categories": [
+                  "cs.IR",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2503.13804v1",
+                "title": "Empowering GraphRAG with Knowledge Filtering and Integration",
+                "summary": "In recent years, large language models (LLMs) have revolutionized the field of natural language processing. However, they often suffer from knowledge gaps and hallucinations. Graph retrieval-augmented generation (GraphRAG) enhances LLM reasoning by integrating structured knowledge from external graphs. However, we identify two key challenges that plague GraphRAG:(1) Retrieving noisy and irrelevant information can degrade performance and (2)Excessive reliance on external knowledge suppresses the model's intrinsic reasoning. To address these issues, we propose GraphRAG-FI (Filtering and Integration), consisting of GraphRAG-Filtering and GraphRAG-Integration. GraphRAG-Filtering employs a two-stage filtering mechanism to refine retrieved information. GraphRAG-Integration employs a logits-based selection strategy to balance external knowledge from GraphRAG with the LLM's intrinsic reasoning,reducing over-reliance on retrievals. Experiments on knowledge graph QA tasks demonstrate that GraphRAG-FI significantly improves reasoning performance across multiple backbone models, establishing a more reliable and effective GraphRAG framework.",
+                "authors": [
+                  "Kai Guo",
+                  "Harry Shomer",
+                  "Shenglai Zeng",
+                  "Haoyu Han",
+                  "Yu Wang",
+                  "Jiliang Tang"
+                ],
+                "published": "2025-03-18T01:29:55Z",
+                "updated": "2025-03-18T01:29:55Z",
+                "url": "http://arxiv.org/abs/2503.13804v1",
+                "pdf_url": "https://arxiv.org/pdf/2503.13804v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.AI",
+                "categories": [
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2608.01269v2",
+                "title": "ACE-GraphRAG: Agentic Context Engineering for Hierarchical GraphRAG",
+                "summary": "Hierarchical Graph Retrieval-Augmented Generation (GraphRAG) organizes corpus knowledge at multiple levels of granularity, yet fixed context construction may fail to translate these multi-resolution representations into a context suited to the current query. We identify this mismatch as the representation--inference gap. We propose Agentic Context Engineering for Hierarchical GraphRAG (ACE-GraphRAG), an inference-time context policy layer that supplements and adapts the initial context for generation. ACE-GraphRAG formulates context construction as a policy over gap-aware refinement, retrieval branches, and task-conditioned adaptation. Parallel Differential Retrieval acquires supplementary evidence from depth-oriented factual and breadth-oriented semantic branches. These evidence increments are consolidated with the initial context while preserving provenance and abstraction levels. Full-ACE applies the full policy uniformly within each task family, whereas Adaptive-ACE selects task- and topology-specific policies for individual queries. We evaluate ACE-GraphRAG on HotpotQA, 2WikiMultiHopQA, and four UltraDomain subsets across multi-hop QA and query-focused summarization. Full-ACE outperforms the evaluated RAG and GraphRAG baselines across both task families, while Adaptive-ACE further improves multi-hop QA and is preferred over Full-ACE on all four UltraDomain subsets. Ablation and topology analyses support treating context construction as a query- and task-dependent inference policy rather than a fixed procedure.",
+                "authors": [
+                  "Yongfeng Huang",
+                  "Yuren Lai",
+                  "Ruiying Chen",
+                  "Haoyu Huang",
+                  "Mingming Zhao",
+                  "James Cheng"
+                ],
+                "published": "2026-08-02T14:22:31Z",
+                "updated": "2026-08-04T03:31:36Z",
+                "url": "http://arxiv.org/abs/2608.01269v2",
+                "pdf_url": "https://arxiv.org/pdf/2608.01269v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.CL",
+                "categories": [
+                  "cs.CL",
+                  "cs.AI"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        },
+        {
+          "tool": "github_search",
+          "args": {
+            "query": "GraphRAG",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "GraphRAG",
+            "sort": "stars",
+            "total_count": 8806,
+            "items": [
+              {
+                "title": "Graphify-Labs/graphify",
+                "url": "https://github.com/Graphify-Labs/graphify",
+                "source": "github.com",
+                "summary": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+                "stars": 145119,
+                "forks": 13896,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:55:00Z",
+                "topics": [
+                  "ai-agents",
+                  "antigravity",
+                  "ast",
+                  "claude-code",
+                  "code-analysis",
+                  "code-search",
+                  "codex",
+                  "cursor",
+                  "developer-tools",
+                  "gemini",
+                  "graphify",
+                  "graphrag",
+                  "knowledge-graph",
+                  "leiden",
+                  "llm",
+                  "mcp",
+                  "openclaw",
+                  "rag",
+                  "skills",
+                  "tree-sitter"
+                ]
+              },
+              {
+                "title": "HKUDS/LightRAG",
+                "url": "https://github.com/HKUDS/LightRAG",
+                "source": "github.com",
+                "summary": "[EMNLP2025] LightRAG: Simple and Fast Retrieval-Augmented Generation",
+                "stars": 40628,
+                "forks": 5771,
+                "language": "Python",
+                "updated_at": "2026-11-10T03:07:00Z",
+                "topics": [
+                  "docling",
+                  "genai",
+                  "gpt",
+                  "graphrag",
+                  "knowledge-graph",
+                  "large-language-models",
+                  "llm",
+                  "mineru",
+                  "rag",
+                  "ragas",
+                  "retrieval-augmented-generation"
+                ]
+              },
+              {
+                "title": "microsoft/graphrag",
+                "url": "https://github.com/microsoft/graphrag",
+                "source": "github.com",
+                "summary": "A modular graph-based Retrieval-Augmented Generation (RAG) system",
+                "stars": 36614,
+                "forks": 3878,
+                "language": "Python",
+                "updated_at": "2026-11-10T02:54:46Z",
+                "topics": [
+                  "gpt",
+                  "gpt-4",
+                  "gpt4",
+                  "graphrag",
+                  "llm",
+                  "llms",
+                  "rag"
+                ]
+              },
+              {
+                "title": "tirth8205/code-review-graph",
+                "url": "https://github.com/tirth8205/code-review-graph",
+                "source": "github.com",
+                "summary": "Local-first code intelligence graph for MCP and CLI. Builds a persistent map of your codebase so AI coding tools read only what matters, with benchmarked context reductions on reviews and large-repo workflows.",
+                "stars": 32677,
+                "forks": 2974,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:37:05Z",
+                "topics": [
+                  "ai-coding",
+                  "claude",
+                  "claude-code",
+                  "code-review",
+                  "graphrag",
+                  "incremental",
+                  "knowledge-graph",
+                  "llm",
+                  "mcp",
+                  "python",
+                  "static-analysis",
+                  "tree-sitter"
+                ]
+              },
+              {
+                "title": "vesoft-inc/nebula",
+                "url": "https://github.com/vesoft-inc/nebula",
+                "source": "github.com",
+                "summary": "A distributed, fast open-source graph database featuring horizontal scalability and high availability",
+                "stars": 12466,
+                "forks": 1341,
+                "language": "C++",
+                "updated_at": "2026-11-10T01:54:46Z",
+                "topics": [
+                  "big-data",
+                  "cpp",
+                  "database",
+                  "distributed",
+                  "distributed-systems",
+                  "graph",
+                  "graph-database",
+                  "graphdb",
+                  "graphrag",
+                  "hacktoberfest",
+                  "knowledge-base",
+                  "knowledge-graph",
+                  "nebula",
+                  "nebula-graph",
+                  "nebulagraph",
+                  "raft",
+                  "scalability"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM01_confirm_then_send_telegram",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_confirmed_send",
+        "difficulty": "medium",
+        "what_it_tests": "Sau khi user đã xác nhận 'Đồng ý, gửi đi nhé' ở lượt sau → gọi send với confirmed=true."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin tổng hợp AI hôm nay lên Telegram giúp mình: OpenAI vừa ra mắt mô hình mới."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có xác nhận muốn gửi bản tin này lên kênh Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Đồng ý, gửi đi nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "OpenAI vừa ra mắt mô hình mới.",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "OpenAI vừa ra mắt mô hình mới.",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM02_clarify_then_github_search",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_github_fill",
+        "difficulty": "medium",
+        "what_it_tests": "Bổ sung chủ đề AI agent ở lượt sau và giữ max_results=5, sort=stars cho github_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm giúp mình 5 repo GitHub nổi bật nhất"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn tìm repo GitHub về chủ đề hay công nghệ nào?"
+        },
+        {
+          "role": "user",
+          "content": "Về AI agent nhé, giữ đúng 5 repo nhiều sao nhất"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "sort": "stars",
+              "max_results": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "query": "AI agent",
+              "sort": "stars",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_search",
+          "args": {
+            "query": "AI agent",
+            "sort": "stars",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "AI agent",
+            "sort": "stars",
+            "total_count": 754724,
+            "items": [
+              {
+                "title": "morluto/rea",
+                "url": "https://github.com/morluto/rea",
+                "source": "github.com",
+                "summary": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+                "stars": 447520,
+                "forks": 110346,
+                "language": "TypeScript",
+                "updated_at": "2026-11-10T04:56:23Z",
+                "topics": [
+                  "agent-skills",
+                  "ai",
+                  "android",
+                  "claude-code",
+                  "cli",
+                  "cpp",
+                  "dsh-plugin",
+                  "html",
+                  "java",
+                  "javascript",
+                  "linux",
+                  "mcp",
+                  "nodejs",
+                  "python",
+                  "rea",
+                  "react",
+                  "rust",
+                  "security",
+                  "touhou",
+                  "typescript"
+                ]
+              },
+              {
+                "title": "obra/superpowers",
+                "url": "https://github.com/obra/superpowers",
+                "source": "github.com",
+                "summary": "An agentic skills framework & software development methodology that works.",
+                "stars": 315253,
+                "forks": 28039,
+                "language": "Shell",
+                "updated_at": "2026-11-10T04:53:08Z",
+                "topics": [
+                  "ai",
+                  "brainstorming",
+                  "coding",
+                  "obra",
+                  "sdlc",
+                  "skills",
+                  "subagent-driven-development",
+                  "superpowers"
+                ]
+              },
+              {
+                "title": "NousResearch/hermes-agent",
+                "url": "https://github.com/NousResearch/hermes-agent",
+                "source": "github.com",
+                "summary": "The agent that grows with you",
+                "stars": 262138,
+                "forks": 58427,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:50:44Z",
+                "topics": [
+                  "ai",
+                  "ai-agent",
+                  "ai-agents",
+                  "anthropic",
+                  "chatgpt",
+                  "claude",
+                  "claude-code",
+                  "codex",
+                  "hermes",
+                  "hermes-agent",
+                  "llm",
+                  "nous-research",
+                  "openai"
+                ]
+              },
+              {
+                "title": "firecrawl/firecrawl",
+                "url": "https://github.com/firecrawl/firecrawl",
+                "source": "github.com",
+                "summary": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+                "stars": 200234,
+                "forks": 10537,
+                "language": "TypeScript",
+                "updated_at": "2026-11-10T04:53:43Z",
+                "topics": [
+                  "ai",
+                  "ai-agents",
+                  "ai-crawler",
+                  "ai-scraping",
+                  "ai-search",
+                  "crawler",
+                  "data-extraction",
+                  "html-to-markdown",
+                  "llm",
+                  "markdown",
+                  "scraper",
+                  "scraping",
+                  "web-crawler",
+                  "web-data",
+                  "web-data-extraction",
+                  "web-scraper",
+                  "web-scraping",
+                  "web-search",
+                  "webscraping"
+                ]
+              },
+              {
+                "title": "DietrichGebert/ponytail",
+                "url": "https://github.com/DietrichGebert/ponytail",
+                "source": "github.com",
+                "summary": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+                "stars": 187852,
+                "forks": 10423,
+                "language": "JavaScript",
+                "updated_at": "2026-11-10T04:56:10Z",
+                "topics": [
+                  "agent-skills",
+                  "ai-agents",
+                  "claude",
+                  "claude-code",
+                  "claude-code-plugin",
+                  "cursor-rules",
+                  "developer-tools",
+                  "llm",
+                  "prompt-engineering",
+                  "yagni"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM03_switch_twitter_to_github",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_to_github",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: bỏ Twitter chuyển sang tìm repo GitHub nhưng giữ chủ đề LangGraph."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người đang bàn gì về LangGraph trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ Twitter đi, tìm repo trên GitHub cho mình"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn giữ chủ đề LangGraph nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "query": "LangGraph"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "query": "LangGraph",
+              "sort": "stars",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_search",
+          "args": {
+            "query": "LangGraph",
+            "sort": "stars",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "LangGraph",
+            "sort": "stars",
+            "total_count": 92464,
+            "items": [
+              {
+                "title": "langchain-ai/langchain",
+                "url": "https://github.com/langchain-ai/langchain",
+                "source": "github.com",
+                "summary": "The agent engineering platform.",
+                "stars": 149287,
+                "forks": 25099,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:51:42Z",
+                "topics": [
+                  "agents",
+                  "ai",
+                  "ai-agents",
+                  "anthropic",
+                  "chatgpt",
+                  "deepagents",
+                  "enterprise",
+                  "framework",
+                  "gemini",
+                  "generative-ai",
+                  "langchain",
+                  "langgraph",
+                  "llm",
+                  "multiagent",
+                  "open-source",
+                  "openai",
+                  "pydantic",
+                  "python",
+                  "rag",
+                  "typescript"
+                ]
+              },
+              {
+                "title": "bytedance/deer-flow",
+                "url": "https://github.com/bytedance/deer-flow",
+                "source": "github.com",
+                "summary": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+                "stars": 85201,
+                "forks": 11984,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:48:54Z",
+                "topics": [
+                  "agent",
+                  "agentic",
+                  "agentic-framework",
+                  "agentic-workflow",
+                  "ai",
+                  "ai-agents",
+                  "deep-research",
+                  "harness",
+                  "langchain",
+                  "langgraph",
+                  "langmanus",
+                  "llm",
+                  "multi-agent",
+                  "nodejs",
+                  "podcast",
+                  "python",
+                  "superagent",
+                  "typescript"
+                ]
+              },
+              {
+                "title": "langchain-ai/langgraph",
+                "url": "https://github.com/langchain-ai/langgraph",
+                "source": "github.com",
+                "summary": "Build resilient agents.",
+                "stars": 44722,
+                "forks": 7707,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:19:26Z",
+                "topics": [
+                  "agents",
+                  "ai",
+                  "ai-agents",
+                  "chatgpt",
+                  "deepagents",
+                  "enterprise",
+                  "framework",
+                  "gemini",
+                  "generative-ai",
+                  "langchain",
+                  "langgraph",
+                  "llm",
+                  "multiagent",
+                  "open-source",
+                  "openai",
+                  "pydantic",
+                  "python",
+                  "rag"
+                ]
+              },
+              {
+                "title": "langchain-ai/deepagents",
+                "url": "https://github.com/langchain-ai/deepagents",
+                "source": "github.com",
+                "summary": "The batteries-included agent harness.",
+                "stars": 31159,
+                "forks": 4399,
+                "language": "Python",
+                "updated_at": "2026-11-10T04:37:48Z",
+                "topics": [
+                  "ai",
+                  "deepagents",
+                  "harness",
+                  "harness-engineering",
+                  "langchain",
+                  "langgraph",
+                  "python",
+                  "typescript"
+                ]
+              },
+              {
+                "title": "NirDiamant/GenAI_Agents",
+                "url": "https://github.com/NirDiamant/GenAI_Agents",
+                "source": "github.com",
+                "summary": "50+ tutorials and implementations for Generative AI Agent techniques, from basic conversational bots to complex multi-agent systems.",
+                "stars": 24900,
+                "forks": 4190,
+                "language": "Jupyter Notebook",
+                "updated_at": "2026-11-10T02:00:15Z",
+                "topics": [
+                  "agentic-ai",
+                  "agents",
+                  "ai",
+                  "ai-agents",
+                  "autonomous-agents",
+                  "genai",
+                  "generative-ai",
+                  "langchain",
+                  "langgraph",
+                  "llm",
+                  "llms",
+                  "machine-learning",
+                  "mcp",
+                  "multi-agent",
+                  "multi-agent-systems",
+                  "openai",
+                  "python",
+                  "rag",
+                  "tutorials"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM04_arxiv_id_correction",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_arxiv_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa mã arXiv từ 1706.03762 sang 2303.08774 và giữ max_pages=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc giúp mình 3 trang đầu của paper arXiv 1706.03762"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm mã bài báo, đổi sang mã 2303.08774 nhé"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn lấy 3 trang đầu thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "paper_text",
+            "args": {
+              "arxiv_url": "2303.08774",
+              "max_pages": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "paper_text",
+            "args": {
+              "arxiv_url": "2303.08774",
+              "max_pages": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "paper_text",
+          "args": {
+            "arxiv_url": "2303.08774",
+            "max_pages": 3
+          },
+          "result": {
+            "tool": "get_arxiv_paper_text",
+            "arxiv_id": "2303.08774",
+            "url": "https://arxiv.org/abs/2303.08774",
+            "pdf_url": "https://arxiv.org/pdf/2303.08774.pdf",
+            "pdf_path": "D:\\VinAI20K\\K5-L3-DAY03-NguyenThahLiem-2A202603358-ResearchAgentToolEval\\starter_v0\\arxiv_papers\\2303.08774.pdf",
+            "txt_path": "D:\\VinAI20K\\K5-L3-DAY03-NguyenThahLiem-2A202603358-ResearchAgentToolEval\\starter_v0\\arxiv_papers\\2303.08774.txt",
+            "page_count": 100,
+            "pages_read": 3,
+            "chars_returned": 8000,
+            "items": [
+              {
+                "title": "arXiv paper 2303.08774",
+                "url": "https://arxiv.org/abs/2303.08774",
+                "source": "arxiv.org",
+                "summary": "GPT-4 Technical Report\nOpenAI∗\nAbstract\nWe report the development of GPT-4, a large-scale, multimodal model which can\naccept image and text inputs and produce text outputs. While less capable than\nhumans in many real-world scenarios, GPT-4 exhibits human-level performance\non various professional and academic benchmarks, including passing a simulated\nbar exam with a score around the top 10% of test takers. GPT-4 is a Transformer-\nbased model pre-trained to predict the next token in a document. The post-training\nalignment process results in improved performance on measures of factuality and\nadherence to desired behavior. A core component of this project was developing\ninfrastructure and optimization methods that behave predictably across a wide\nrange of scales. This allowed us to accurately predict some aspects of GPT-4’s\nperformance based on models trained with no more than 1/1,000th the compute of\nGPT-4.\n1 Introduction\nThis technical report presents GPT-4, a large multimodal model capable of processing image and\ntext inputs and producing text outputs. Such models are an important area of study as they have the\npotential to be used in a wide range of applications, such as dialogue systems, text summarization,\nand machine translation. As such, they have been the subject of substantial interest and progress in\nrecent years [1–34].\nOne of the main goals of developing such models is to improve their ability to understand and generate\nnatural language text, particularly in more complex and nuanced scenarios. To test its capabilities\nin such scenarios, GPT-4 was evaluated on a variety of exams originally designed for humans. In\nthese evaluations it performs quite well and often outscores the vast majority of human test takers.\nFor example, on a simulated bar exam, GPT-4 achieves a score that falls in the top 10% of test takers.\nThis contrasts with GPT-3.5, which scores in the bottom 10%.\nOn a suite of traditional NLP benchmarks, GPT-4 outperforms both previous large language models\nand most state-of-the-art systems (which often have benchmark-specific training or hand-engineering).\nOn the MMLU benchmark [35, 36], an English-language suite of multiple-choice questions covering\n57 subjects, GPT-4 not only outperforms existing models by a considerable margin in English, but\nalso demonstrates strong performance in other languages. On translated variants of MMLU, GPT-4\nsurpasses the English-language state-of-the-art in 24 of 26 languages considered. We discuss these\nmodel capability results, as well as model safety improvements and results, in more detail in later\nsections.\nThis report also discusses a key challenge of the project, developing deep learning infrastructure and\noptimization methods that behave predictably across a wide range of scales. This allowed us to make\npredictions about the expected performance of GPT-4 (based on small runs trained in similar ways)\nthat were tested against the final run to increase confidence in our training.\nDespite its capabilities, GPT-4 has similar limitations to earlier GPT models [1, 37, 38]: it is not fully\nreliable (e.g. can suffer from “hallucinations”), has a limited context window, and does not learn\n∗Please cite this work as “OpenAI (2023)\". Full authorship contribution statements appear at the end of the\ndocument. Correspondence regarding this technical report can be sent to gpt4-report@openai.com\narXiv:2303.08774v6  [cs.CL]  4 Mar 2024\n\nfrom experience. Care should be taken when using the outputs of GPT-4, particularly in contexts\nwhere reliability is important.\nGPT-4’s capabilities and limitations create significant and novel safety challenges, and we believe\ncareful study of these challenges is an important area of research given the potential societal impact.\nThis report includes an extensive system card (after the Appendix) describing some of the risks we\nforesee around bias, disinformation, over-reliance, privacy, cybersecurity, proliferation, and more.\nIt also describes interventions we made to mitigate potential harms from the deployment of GPT-4,\nincluding adversarial testing with domain experts, and a model-assisted safety pipeline.\n2 Scope and Limitations of this Technical Report\nThis report focuses on the capabilities, limitations, and safety properties of GPT-4. GPT-4 is a\nTransformer-style model [39] pre-trained to predict the next token in a document, using both publicly\navailable data (such as internet data) and data licensed from third-party providers. The model was\nthen fine-tuned using Reinforcement Learning from Human Feedback (RLHF) [ 40]. Given both\nthe competitive landscape and the safety implications of large-scale models like GPT-4, this report\ncontains no further details about the architecture (including model size), hardware, training compute,\ndataset construction, training method, or similar.\nWe are committed to independent auditing of our technologies, and shared some initial steps and\nideas in this area in the system card accompanying this release.2 We plan to make further technical\ndetails available to additional third parties who can advise us on how to weigh the competitive and\nsafety considerations above against the scientific value of further transparency.\n3 Predictable Scaling\nA large focus of the GPT-4 project was building a deep learning stack that scales predictably. The\nprimary reason is that for very large training runs like GPT-4, it is not feasible to do extensive\nmodel-specific tuning. To address this, we developed infrastructure and optimization methods that\nhave very predictable behavior across multiple scales. These improvements allowed us to reliably\npredict some aspects of the performance of GPT-4 from smaller models trained using 1, 000× –\n10, 000× less compute.\n3.1 Loss Prediction\nThe final loss of properly-trained large language models is thought to be well approximated by power\nlaws in the amount of compute used to train the model [41, 42, 2, 14, 15].\nTo verify the scalability of our optimization infrastructure, we predicted GPT-4’s final loss on our\ninternal codebase (not part of the training set) by fitting a scaling law with an irreducible loss term\n(as in Henighan et al. [15]): L(C) = aC b +c, from models trained using the same methodology\nbut using at most 10,000x less compute than GPT-4. This prediction was made shortly after the run\nstarted, without use of any partial results. The fitted scaling law predicted GPT-4’s final loss with\nhigh accuracy (Figure 1).\n3.2 Scaling of Capabilities on HumanEval\nHaving a sense of the capabilities of a model before training can improve decisions around alignment,\nsafety, and deployment. In addition to predicting final loss, we developed methodology to predict\nmore interpretable metrics of capability. One such metric is pass rate on the HumanEval dataset [43],\nwhich measures the ability to synthesize Python functions of varying complexity. We successfully\npredicted the pass rate on a subset of the HumanEval dataset by extrapolating from models trained\nwith at most 1, 000× less compute (Figure 2).\nFor an individual problem in HumanEval, performance may occasionally worsen with scale. Despite\nthese challenges, we find an approximate power law relationship−EP [log(pass_rate(C))] = α∗C−k\n2In addition to the accompanying system card, OpenAI will soon publish additional thoughts on the social\nand economic implications of AI systems, including the need for effective regulation.\n2\n\nObserved\nPrediction\ngpt-4\n100p 10n 1µ 100µ 0.01 1\nCompute\n1.0\n2.0\n3.0\n4.0\n5.0\n6.0\nBits per word\nOpenAI codebase next word prediction\nFigure 1. Performance of GPT-4 and smaller models. The metric is final loss on a dataset derived\nfrom our internal codebase. This is a convenient, large dataset of code tokens which is not contained in\nthe training set. We chose to look at loss because it tends to be less noisy than other measures across\ndifferent amounts of training compute. A power law fit to the smaller models (excluding GPT-4) is\nshown as the dot"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM05_cancel_send_after_clarify",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_cancel_send",
+        "difficulty": "medium",
+        "what_it_tests": "Khi user từ chối/hủy gửi ở lượt xác nhận → KHÔNG gọi send hay bất kỳ tool nào."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin này lên Telegram giúp mình"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có chắc chắn muốn đăng bản tin này lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi hủy đi, đừng đăng nữa, cảm ơn bạn."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Không sao, mình sẽ không đăng nữa. Nếu bạn cần gì khác, hãy cho mình biết!",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    }
+  ]
+}

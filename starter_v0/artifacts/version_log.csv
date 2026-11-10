@@ -1,8 +1,4 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_before,metric_after,run_file
-
 v0,NguyenThanhLiem,baseline,v0+peb1c8179815b+t5b22a2476d41,eb1c8179815b,5b22a2476d41,baseline,Đo hành vi chưa tối ưu trước khi sửa,,0.6471,runs/v0_B_base_openrouter_20261110T110625205823.json
 v1,NguyenThanhLiem,system_prompt.md,v1+p2aa81fcaa6f4+t5b22a2476d41,2aa81fcaa6f4,5b22a2476d41,Sửa chỉ dẫn sai trong starter system_prompt,Xóa lệnh đoán mò và tự gửi; thêm quy tắc clarify khi thiếu thông tin/xác nhận gửi và chặn câu ngoài phạm vi,0.6471,0.85,runs/v1_B_base_openrouter_20261110T111328770850.json
-
-v0,team,baseline,v0+peb1c8179815b+t5b22a2476d41,eb1c8179815bd79d34de7d326420bb99b3072e6e8ae96464c02d4411f905fc68,5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0,baseline starter code,unmodified starter prompt and tool definitions,N/A,0.65,runs/v0_B_base_openai_20261110T100441663938.json
-v1,team,system_prompt.md,v1+p386da99ef4d2+t5b22a2476d41,386da99ef4d280c2ffb9622144ba10bf93d0a5d01eec7f22d770a49f849d6cc7,5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0,optimize system prompt,add clarify rule and concise query rule,0.65,1.00,runs/v1_B_base_openai_20261110T104801876153.json
-
+v2,NguyenThanhLiem,tools.yaml,v2+pf894cffd4ba5+t20d17c8a9556,f894cffd4ba5,20d17c8a9556,Viết rõ description và arg conventions trong tools.yaml,Mô tả rõ USE WHEN / DO NOT USE WHEN và map tên sang handle giúp sửa lỗi R01 và R04,0.85,0.9,runs/v2_B_base_openrouter_20261110T114657532378.json

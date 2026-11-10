@@ -3,5 +3,285 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_github_search_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm giúp mình các repo GitHub mã nguồn mở nhiều sao nhất về MCP server.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "sort": "stars"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "routing_github_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm repo mã nguồn mở trên GitHub → gọi tool mới github_search với sort=stars."
+      }
+    },
+    {
+      "id": "G02_ylecun_handle_mapping",
+      "phase": "B",
+      "suite": "group",
+      "query": "Lấy 3 tweet mới nhất của Yann LeCun",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "ylecun",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "name_to_handle_ylecun",
+        "difficulty": "medium",
+        "what_it_tests": "Map tên Yann LeCun thành handle ylecun (không có @) và limit=3."
+      }
+    },
+    {
+      "id": "G03_month_timeframe_news",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tin tức về Anthropic trong tháng này có gì đáng chú ý?",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "Anthropic",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "arg_timeframe_month",
+        "difficulty": "medium",
+        "what_it_tests": "'trong tháng này' + 'tin tức' → lookup với query='Anthropic', topic='news', timeframe='month'."
+      }
+    },
+    {
+      "id": "G04_out_of_scope_recipe",
+      "phase": "B",
+      "suite": "group",
+      "query": "Chỉ mình công thức nấu phở bò Hà Nội chuẩn vị với.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_cooking",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi nấu ăn ngoài phạm vi AI/tech research → không gọi tool nào."
+      }
+    },
+    {
+      "id": "G05_parallel_github_and_papers",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm paper arXiv về GraphRAG và tìm luôn repo GitHub về GraphRAG.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {}
+          },
+          {
+            "name": "github_search",
+            "args": {}
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_papers_and_github",
+        "difficulty": "hard",
+        "what_it_tests": "Yêu cầu tìm cả paper arXiv lẫn repo GitHub → gọi song song papers và github_search."
+      }
+    },
+    {
+      "id": "GM01_confirm_then_send_telegram",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin tổng hợp AI hôm nay lên Telegram giúp mình: OpenAI vừa ra mắt mô hình mới."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có xác nhận muốn gửi bản tin này lên kênh Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Đồng ý, gửi đi nhé"
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmed_send",
+        "difficulty": "medium",
+        "what_it_tests": "Sau khi user đã xác nhận 'Đồng ý, gửi đi nhé' ở lượt sau → gọi send với confirmed=true."
+      }
+    },
+    {
+      "id": "GM02_clarify_then_github_search",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm giúp mình 5 repo GitHub nổi bật nhất"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn tìm repo GitHub về chủ đề hay công nghệ nào?"
+        },
+        {
+          "role": "user",
+          "content": "Về AI agent nhé, giữ đúng 5 repo nhiều sao nhất"
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "sort": "stars",
+              "max_results": 5
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_github_fill",
+        "difficulty": "medium",
+        "what_it_tests": "Bổ sung chủ đề AI agent ở lượt sau và giữ max_results=5, sort=stars cho github_search."
+      }
+    },
+    {
+      "id": "GM03_switch_twitter_to_github",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Mọi người đang bàn gì về LangGraph trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ Twitter đi, tìm repo trên GitHub cho mình"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn giữ chủ đề LangGraph nhé"
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_search",
+            "args": {
+              "query": "LangGraph"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_switch_to_github",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: bỏ Twitter chuyển sang tìm repo GitHub nhưng giữ chủ đề LangGraph."
+      }
+    },
+    {
+      "id": "GM04_arxiv_id_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đọc giúp mình 3 trang đầu của paper arXiv 1706.03762"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm mã bài báo, đổi sang mã 2303.08774 nhé"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn lấy 3 trang đầu thôi"
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "paper_text",
+            "args": {
+              "arxiv_url": "2303.08774",
+              "max_pages": 3
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_arxiv_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa mã arXiv từ 1706.03762 sang 2303.08774 và giữ max_pages=3."
+      }
+    },
+    {
+      "id": "GM05_cancel_send_after_clarify",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin này lên Telegram giúp mình"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có chắc chắn muốn đăng bản tin này lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi hủy đi, đừng đăng nữa, cảm ơn bạn."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "skill": "multiturn_cancel_send",
+        "difficulty": "medium",
+        "what_it_tests": "Khi user từ chối/hủy gửi ở lượt xác nhận → KHÔNG gọi send hay bất kỳ tool nào."
+      }
+    }
+  ]
 }
