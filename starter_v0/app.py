@@ -1,4 +1,4 @@
-r"""Streamlit interface for the current research agent artifacts.
+r"""Streamlit interface for the Research Agent artifact versions.
 
 Run: .venv\Scripts\python -m streamlit run app.py
 """
@@ -20,61 +20,105 @@ from versioning import artifact_version_dict, build_artifact_version
 
 ROOT = Path(__file__).resolve().parent
 load_lab_env(ROOT)
-PROMPT = ROOT / "artifacts/system_prompt.md"
-TOOLS = ROOT / "artifacts/tools.yaml"
-VERSION = "v2"
 MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4")
+VERSION_FILES = {
+    "v1": (ROOT / "artifacts" / "versions" / "v1" / "system_prompt.md",
+           ROOT / "artifacts" / "versions" / "v1" / "tools.yaml"),
+    "v2": (ROOT / "artifacts" / "versions" / "v2" / "system_prompt.md",
+           ROOT / "artifacts" / "versions" / "v2" / "tools.yaml"),
+    "v3": (ROOT / "artifacts" / "system_prompt.md", ROOT / "artifacts" / "tools.yaml"),
+}
+VERSION_NOTES = {
+    "v1": "Prompt NTL: routing, clarify và query discipline.",
+    "v2": "v1 + deduplicate + contract tests + group eval.",
+    "v3": "v2 + latest-turn guardrails + safe draft confirmation.",
+}
 
 
-def new_session() -> dict:
+def version_paths(version: str) -> tuple[Path, Path]:
+    try:
+        return VERSION_FILES[version]
+    except KeyError as exc:
+        raise ValueError(f"Unsupported artifact version: {version}") from exc
+
+
+def new_session(version: str, prompt_path: Path, tools_path: Path) -> dict:
     return {
-        "transcript_id": f"{VERSION}_ui_{datetime.now():%Y%m%dT%H%M%S}_{uuid4().hex[:8]}",
-        **artifact_version_dict(build_artifact_version(VERSION, PROMPT, TOOLS)),
+        "transcript_id": f"{version}_ui_{datetime.now():%Y%m%dT%H%M%S}_{uuid4().hex[:8]}",
+        **artifact_version_dict(build_artifact_version(version, prompt_path, tools_path)),
         "provider": "openai", "model": MODEL, "interface": "streamlit",
         "created_at": now_iso(), "turns": [],
     }
 
 
+def reset_session(version: str) -> None:
+    prompt_path, tools_path = version_paths(version)
+    st.session_state.transcript = new_session(version, prompt_path, tools_path)
+    st.session_state.selected_version = version
+
+
 def main() -> None:
-    st.set_page_config(page_title=f"Research Agent · {VERSION}", page_icon=":material/search:", layout="centered")
-    if "transcript" not in st.session_state:
-        st.session_state.transcript = new_session()
-    if (st.session_state.transcript.get("artifact_version") != build_artifact_version(VERSION, PROMPT, TOOLS).artifact_version
-            or st.session_state.transcript.get("model") != MODEL):
-        # Previous turns have already been persisted; do not mix artifact versions.
-        st.session_state.transcript = new_session()
-    transcript = st.session_state.transcript
-    declarations = load_tool_declarations(TOOLS)
+    st.set_page_config(page_title="Research Agent", page_icon=":material/search:", layout="wide")
+    if "selected_version" not in st.session_state:
+        st.session_state.selected_version = "v3"
 
     with st.sidebar:
-        st.header("Phiên nghiên cứu")
-        st.caption(f"OpenAI · {MODEL} · {VERSION}")
-        if st.button("Cuộc trò chuyện mới", use_container_width=True):
-            st.session_state.transcript = new_session()
+        st.markdown("## Research Agent")
+        st.caption("Artifact playground · OpenAI-compatible provider")
+        selected_version = st.selectbox(
+            "Artifact version",
+            list(VERSION_FILES),
+            index=list(VERSION_FILES).index(st.session_state.selected_version),
+            format_func=lambda value: f"{value}  ·  {VERSION_NOTES[value].split(' + ')[0]}",
+        )
+        if selected_version != st.session_state.selected_version:
+            reset_session(selected_version)
             st.rerun()
+
+        prompt_path, tools_path = version_paths(selected_version)
+        artifact = build_artifact_version(selected_version, prompt_path, tools_path)
+        st.info(VERSION_NOTES[selected_version])
+        st.caption(f"Artifact: `{artifact.artifact_version}`")
+        st.divider()
+        if st.button("Cuộc trò chuyện mới", use_container_width=True):
+            reset_session(selected_version)
+            st.rerun()
+        if "transcript" not in st.session_state:
+            reset_session(selected_version)
+        transcript = st.session_state.transcript
         st.download_button(
             "Tải transcript JSON",
             json.dumps(transcript, ensure_ascii=False, indent=2),
             file_name=f"{transcript['transcript_id']}.transcript.json",
             mime="application/json", use_container_width=True,
         )
-        st.subheader("Kết nối dịch vụ")
-        for label, key in [("OpenAI", "OPENAI_API_KEY"), ("Tìm web · Tavily", "TAVILY_API_KEY"),
-                           ("Đọc URL · Firecrawl", "FIRECRAWL_API_KEY"), ("Twitter/X · RapidAPI", "RAPIDAPI_KEY")]:
-            st.text(f"{label}: {'đã có key' if os.getenv(key) else 'chưa có key'}")
-        st.caption("Trạng thái chỉ kiểm tra cấu hình, không xác thực key. Bổ sung key trong .env rồi khởi động lại UI.")
-        with st.expander(f"{len(declarations)} tool có sẵn"):
-            for tool in declarations:
-                st.markdown(f"**{tool['name']}** — {tool['description']}")
-        st.caption("v2 xây từ prompt v1 của NTL; thêm deduplicate, 10 case nhóm và unit test. Xem kết quả trong runs.")
+        st.divider()
+        st.markdown("**Kết nối dịch vụ**")
+        for label, key in [
+            ("OpenAI", "OPENAI_API_KEY"),
+            ("Tìm web · Tavily", "TAVILY_API_KEY"),
+            ("Đọc URL · Firecrawl", "FIRECRAWL_API_KEY"),
+            ("Twitter/X · RapidAPI", "RAPIDAPI_KEY"),
+        ]:
+            state = "đã có key" if os.getenv(key) else "chưa có key"
+            st.caption(f"{label}  ·  {state}")
 
+    if "transcript" not in st.session_state:
+        reset_session(selected_version)
+    transcript = st.session_state.transcript
+    declarations = load_tool_declarations(tools_path)
     st.title("Research Agent")
-    st.write("Tìm nguồn, đọc tài liệu và theo dõi cách agent sử dụng công cụ.")
-    st.caption("v2 · Nền v1 NTL · GPT-5.4 · Transcript tự lưu")
+    st.caption(f"{selected_version} · {MODEL} · {len(declarations)} tools · transcript tự lưu")
+    st.write("Chọn artifact version ở thanh bên để so sánh cách prompt và tool declaration ảnh hưởng đến routing.")
+
     if not transcript["turns"]:
-        st.info("Bắt đầu bằng một câu hỏi. Với cấu hình hiện tại, bạn có thể thử tra cứu policy nội bộ hoặc định dạng dữ liệu có sẵn.")
+        st.info("Bắt đầu bằng một yêu cầu nghiên cứu. Chọn v1, v2 hoặc v3 trước khi gửi câu hỏi.")
         with st.expander("Câu hỏi gợi ý", expanded=True):
-            st.markdown("- Chính sách nội bộ yêu cầu trích dẫn nguồn như thế nào?\n- Bạn là gì và có những công cụ nào?\n- Tin AI hôm nay có gì? *(cần key Tavily để lấy dữ liệu)*")
+            st.markdown(
+                "- Lọc các URL trùng trong danh sách nguồn đã có.\n"
+                "- Tìm 3 tweet phổ biến nhất về Anthropic trên X.\n"
+                "- Đọc và tóm tắt bài này giúp tôi."
+            )
 
     for turn in transcript["turns"]:
         with st.chat_message("user"):
@@ -88,37 +132,42 @@ def main() -> None:
                 with st.expander(f"Xem {len(turn['tool_events'])} lần gọi tool"):
                     st.json(turn["tool_events"])
 
-    query = st.chat_input("Nhập yêu cầu nghiên cứu…", disabled=not bool(os.getenv("OPENAI_API_KEY")))
-    if not os.getenv("OPENAI_API_KEY"):
-        st.error("Thiếu OPENAI_API_KEY. Điền key trong .env và khởi động lại UI.")
+    has_key = bool(os.getenv("OPENAI_API_KEY"))
+    query = st.chat_input("Nhập yêu cầu nghiên cứu…", disabled=not has_key)
+    if not has_key:
+        st.warning("Thiếu OPENAI_API_KEY. Điền key trong .env rồi khởi động lại UI.")
     if query:
         history = []
         for turn in transcript["turns"]:
             if turn["status"] != "provider_error":
-                history.extend([{"role": "user", "content": turn["user"]},
-                                {"role": "assistant", "content": turn["assistant_text"]}])
+                history.extend([
+                    {"role": "user", "content": turn["user"]},
+                    {"role": "assistant", "content": turn["assistant_text"]},
+                ])
         record = {"turn_index": len(transcript["turns"]) + 1, "user": query, "started_at": now_iso()}
         with st.chat_message("user"):
             st.write(query)
         try:
-            with st.spinner("Agent đang xử lý yêu cầu…"):
+            with st.spinner(f"Đang xử lý bằng {selected_version}…"):
                 result = run_model_tool_loop(
                     provider=make_provider("openai"),
-                    messages=[{"role": "system", "content": PROMPT.read_text(encoding="utf-8")},
-                              *trim_history(history, 5), {"role": "user", "content": query}],
+                    messages=[
+                        {"role": "system", "content": prompt_path.read_text(encoding="utf-8")},
+                        *trim_history(history, 5),
+                        {"role": "user", "content": query},
+                    ],
                     tools=to_openai_tools(declarations), model=MODEL, max_tool_rounds=4,
                 )
             record.update(result)
         except Exception:
-            # Raw provider exceptions can contain request details; keep them out of UI/transcripts.
-            record.update(status="provider_error", assistant_text="Không kết nối được OpenAI. Kiểm tra key, số dư và kết nối mạng rồi thử lại.", rounds=[], tool_events=[])
+            record.update(
+                status="provider_error",
+                assistant_text="Không kết nối được OpenAI. Kiểm tra key, số dư và kết nối mạng rồi thử lại.",
+                rounds=[], tool_events=[],
+            )
         record["ended_at"] = now_iso()
         transcript["turns"].append(record)
-        try:
-            write_transcript(ROOT / "transcripts" / f"{transcript['transcript_id']}.transcript.json", transcript)
-        except OSError:
-            st.error("Không lưu được transcript vào ổ đĩa. Bạn vẫn có thể tải JSON ở thanh bên.")
-            st.stop()
+        write_transcript(ROOT / "transcripts" / f"{transcript['transcript_id']}.transcript.json", transcript)
         st.rerun()
 
 
