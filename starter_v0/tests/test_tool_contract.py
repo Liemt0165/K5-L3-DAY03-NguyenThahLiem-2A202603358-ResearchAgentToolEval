@@ -60,7 +60,10 @@ def test_openai_tool_schema_shape() -> None:
 def test_tool_folder_has_tool_md_with_matching_name(name: str) -> None:
     matches = []
     for tool_md in (ROOT / "tools").glob("*/TOOL.md"):
-        front = tool_md.read_text(encoding="utf-8").split("---")[1]
+        parts = tool_md.read_text(encoding="utf-8").split("---", 2)
+        if len(parts) != 3:
+            continue
+        front = parts[1]
         if (yaml.safe_load(front) or {}).get("name") == name:
             matches.append(tool_md)
     assert matches, f"No tools/<folder>/TOOL.md with 'name: {name}' in its frontmatter"

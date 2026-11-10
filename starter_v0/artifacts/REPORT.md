@@ -33,8 +33,16 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 | Tên tool | Làm được gì | Tool mới nhóm thêm? |
 |---|---|---|
 | clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+| timeline | lấy bài đăng từ một tài khoản X cụ thể | không |
+| social_search | tìm bài đăng X theo chủ đề | không |
+| lookup | tìm thông tin và tin tức trên web | không |
+| fetch | đọc nội dung URL do người dùng cung cấp | không |
+| format | định dạng các nguồn đã thu thập thành digest | không |
+| send | gửi digest lên Telegram sau khi xác nhận | không |
+| policy | tra cứu chính sách nội bộ | không |
+| papers | tìm bài báo trên arXiv | không |
+| paper_text | trích văn bản từ bài arXiv | không |
+| github_search | tìm repository công khai theo từ khóa/ngôn ngữ | có (v2) |
 
 ## A3. Câu hỏi mẫu để thử
 
@@ -56,7 +64,7 @@ Fill from `artifacts/version_log.csv` and `runs/*.json`.
 |---|---|---|---:|---:|---|
 | v0 | baseline |  |  |  |  |
 | v1 |  |  |  |  |  |
-| v2 |  |  |  |  |  |
+| v2 | `system_prompt.md`, `tools.yaml`, `github_search` | GitHub-specific routing should separate repository discovery from web news and source reading | 100% v1 base | Chưa chạy live eval | `runs/pending-live-group-eval` |
 | v3 |  |  |  |  |  |
 
 ## B2. Failure Analysis
@@ -73,7 +81,16 @@ List the 10 cases added to `data/eval_group.json` (5 single turn + 5 multi turn)
 
 | Case ID | What It Tests | Expected Tool/Behavior | Result |
 |---|---|---|---|
-|  |  |  |  |
+| G01_github_search_python_research_agents | GitHub routing, language, stars, limit | github_search | Chưa chạy live eval |
+| G02_github_search_recent_rust_vector_databases | language, updated sort, limit | github_search | Chưa chạy live eval |
+| G03_github_search_sort_by_forks | fork sort and limit | github_search | Chưa chạy live eval |
+| G04_web_news_not_github | Distinguishes web news from repository search | lookup | Chưa chạy live eval |
+| G05_meta_question_no_tool | No unnecessary tool call | No tool | Chưa chạy live eval |
+| G06_multiturn_add_github_language_filter | Carries topic and adds language | github_search | Chưa chạy live eval |
+| G07_multiturn_correct_language_and_sort | Applies latest language, sort, and limit | github_search | Chưa chạy live eval |
+| G08_multiturn_change_github_result_limit | Carries topic and updates limit | github_search | Chưa chạy live eval |
+| G09_multiturn_switch_github_search_to_news | Latest intent changes tool | lookup | Chưa chạy live eval |
+| G10_multiturn_switch_account_tweets_to_topic_top_posts | Switches timeline to topic search | social_search | Chưa chạy live eval |
 
 ## B4. Live Chat Evidence
 
@@ -92,7 +109,7 @@ Only fill if your team did bonus.
 | send (Telegram) |  |  |  |
 | arXiv/company policy |  |  |  |
 | UI |  |  |  |
-| Tool unit tests (`tests/`) | `pytest` output |  |  |
+| Tool unit tests (`tests/`) | `pytest -c starter_v0/pytest.ini starter_v0/tests -q` | 18 test mới trong `test_tools_todo.py`; toàn suite 85 passed, 0 skipped | Offline suite xanh; live group eval chưa chạy |
 
 Tool unit tests: số test đã viết, số bug tìm được trong tool có sẵn (nếu có), và một ví dụ lỗi mà unit test bắt được nhưng eval không bắt được.
 

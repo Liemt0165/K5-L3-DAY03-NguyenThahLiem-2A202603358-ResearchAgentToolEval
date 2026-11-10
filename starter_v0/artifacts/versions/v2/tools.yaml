@@ -1,0 +1,123 @@
+# Tool schemas exposed to the research agent. Keep names and parameter keys aligned
+# with tools/__init__.py and eval expectations.
+tools:
+  # ---------------- Core tools ----------------
+  - name: clarify
+    description: "Ask the user for missing information or explicit yes/no confirmation. Use before actions with external side effects; do not guess required targets. Do not use when the request is already clear."
+    parameters:
+      type: object
+      properties:
+        question: {type: string, default: "", description: "One concise question for the user"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Expected reply format; use yes_no for confirmation"}
+        options: {type: array, default: [], items: {type: string}, description: "Choices when response_type is choice"}
+      required: [question]
+
+  - name: timeline
+    description: "Fetch recent posts from one named X/Twitter account. Use only when the user asks about a specific account; do not use for topic-wide searches or when the account is unknown."
+    parameters:
+      type: object
+      properties:
+        screenname: {type: string, default: "", description: "Account handle without a leading @"}
+        limit: {type: integer, default: 5, description: "Maximum number of posts to return"}
+      required: [screenname]
+
+  - name: social_search
+    description: "Search X/Twitter posts by topic. Use for community discussion or popular-post requests; do not use for posts by one named account or general web results."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Core topic keywords only"}
+        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Use Top for popular posts and Latest for recent posts"}
+        limit: {type: integer, default: 5, description: "Maximum number of posts to return"}
+      required: [query]
+
+  - name: lookup
+    description: "Search the public web for general information or news. Use topic=news and a timeframe for current events; do not use to read a supplied URL, search X posts, or find GitHub repositories."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Core subject/entity keywords; omit words such as news, today, or latest"}
+        topic: {type: string, enum: [general, news], default: "general", description: "Set news for current-event searches; otherwise general"}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Recency filter for news searches"}
+        max_results: {type: integer, default: 5, description: "Maximum number of web results"}
+      required: [query]
+
+  - name: fetch
+    description: "Extract readable content from a user-supplied URL. Use when a specific URL is present; do not invent URLs or use for open-ended search."
+    parameters:
+      type: object
+      properties:
+        url: {type: string, default: "", description: "Explicit URL supplied by the user"}
+      required: [url]
+
+  - name: format
+    description: "Format already retrieved items into a digest. Use only when source items are available; do not use to search for or invent content."
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          default: []
+          description: "Danh sách item"
+          items:
+            type: object
+            properties:
+              title: {type: string, description: "Item title"}
+              url: {type: string, description: "Source URL, when available"}
+              source: {type: string, description: "Source label, when available"}
+              summary: {type: string, description: "Retrieved item summary"}
+              section: {type: string, description: "Optional digest section"}
+        template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Output layout"}
+        headline: {type: string, default: "", description: "Optional digest title"}
+      required: [items, template]
+
+  # ---------------- Bonus tools ----------------
+  - name: send
+    description: "Send prepared text to the configured Telegram chat. Only call after the user explicitly confirms and set confirmed=true; do not use for drafting or before confirmation."
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Text to send"}
+        confirmed: {type: boolean, default: false, description: "Must be true only after explicit user confirmation"}
+      required: [text]
+
+  - name: policy
+    description: "Search local company policy documents. Use for internal rules and compliance questions; do not use for current external facts."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Policy topic or keywords"}
+        policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Optional policy area filter"}
+        top_k: {type: integer, default: 3, description: "Maximum matching policy sections"}
+      required: [query]
+
+  - name: papers
+    description: "Search arXiv for scholarly papers. Use for academic literature discovery; do not use for general web news or to extract full paper text."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Research topic or arXiv query"}
+        max_results: {type: integer, default: 5, description: "Maximum number of papers"}
+        sort_by: {type: string, enum: [relevance, lastUpdatedDate, submittedDate], default: "relevance", description: "Sort by relevance, most recently updated, or submission date"}
+      required: [query]
+
+  - name: paper_text
+    description: "Download and extract text from a specified arXiv paper. Use after the user provides an arXiv ID/URL or papers returned by papers; do not use for arbitrary URLs."
+    parameters:
+      type: object
+      properties:
+        arxiv_url: {type: string, default: "", description: "arXiv ID or URL"}
+        max_pages: {type: integer, default: 5, description: "Maximum PDF pages to extract"}
+        max_chars: {type: integer, default: 8000, description: "Maximum extracted characters"}
+      required: [arxiv_url]
+
+  - name: github_search
+    description: "Search public GitHub repositories by keywords and optional language, sorted by stars, forks, or recent updates. Use when the user wants repositories or project examples; do not use for general web search, private repositories, or reading a repository's source code."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, description: "Required core repository keywords; do not include language if using the language filter"}
+        language: {type: string, default: "", description: "Optional GitHub language filter such as Python or TypeScript"}
+        sort: {type: string, enum: [stars, forks, updated], default: "stars", description: "Sort by stars, forks, or most recently updated"}
+        limit: {type: integer, default: 5, description: "Number of repositories to return (1-100)"}
+      required: [query]

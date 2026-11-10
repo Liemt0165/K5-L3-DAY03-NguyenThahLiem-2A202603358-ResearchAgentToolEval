@@ -1,7 +1,118 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "description": "Ten team-authored cases: five single-turn and five multi-turn, covering GitHub repository search, tool routing, argument extraction, and context updates.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_github_search_python_research_agents",
+      "phase": "B",
+      "suite": "group",
+      "query": "Find five popular GitHub repositories about research agents written in Python.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "research agents", "language": "Python", "sort": "stars", "limit": 5}}]},
+      "metadata": {"what_it_tests": "Routes repository discovery to GitHub and extracts language, popularity, and count."}
+    },
+    {
+      "id": "G02_github_search_recent_rust_vector_databases",
+      "phase": "B",
+      "suite": "group",
+      "query": "Show me the three most recently updated Rust GitHub repositories about vector databases.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "vector databases", "language": "Rust", "sort": "updated", "limit": 3}}]},
+      "metadata": {"what_it_tests": "Extracts the language filter, updated sort, and requested result count."}
+    },
+    {
+      "id": "G03_github_search_sort_by_forks",
+      "phase": "B",
+      "suite": "group",
+      "query": "Find four RAG framework repositories with the most forks.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "RAG frameworks", "sort": "forks", "limit": 4}}]},
+      "metadata": {"what_it_tests": "Uses GitHub fork sorting rather than popularity by stars."}
+    },
+    {
+      "id": "G04_web_news_not_github",
+      "phase": "B",
+      "suite": "group",
+      "query": "What are the latest news stories about GitHub Actions this week?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "GitHub Actions", "topic": "news", "timeframe": "week"}}]},
+      "metadata": {"what_it_tests": "Separates web news from searches for GitHub repositories."}
+    },
+    {
+      "id": "G05_meta_question_no_tool",
+      "phase": "B",
+      "suite": "group",
+      "query": "What can you help me research?",
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"what_it_tests": "Answers an agent-capability question without invoking a research tool."}
+    },
+    {
+      "id": "G06_multiturn_add_github_language_filter",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Find GitHub repositories about local-first databases."},
+        {"role": "assistant", "content": "Do you have a language preference?"},
+        {"role": "user", "content": "Only Python, please."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "local-first databases", "language": "Python", "sort": "stars"}}]},
+      "metadata": {"what_it_tests": "Carries forward the original query and adds a language preference from the latest turn."}
+    },
+    {
+      "id": "G07_multiturn_correct_language_and_sort",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Find repositories for graph libraries on GitHub."},
+        {"role": "assistant", "content": "I will search GitHub."},
+        {"role": "user", "content": "Actually, use Go and sort by latest update; return two."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "graph libraries", "language": "Go", "sort": "updated", "limit": 2}}]},
+      "metadata": {"what_it_tests": "Applies the latest language, sort, and limit instructions."}
+    },
+    {
+      "id": "G08_multiturn_change_github_result_limit",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Search GitHub for vector search repositories."},
+        {"role": "assistant", "content": "How many results would you like?"},
+        {"role": "user", "content": "Show seven, ranked by stars."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "github_search", "args": {"query": "vector search", "sort": "stars", "limit": 7}}]},
+      "metadata": {"what_it_tests": "Retains the original repository topic and extracts the corrected limit."}
+    },
+    {
+      "id": "G09_multiturn_switch_github_search_to_news",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Find GitHub repositories about OpenAI agents."},
+        {"role": "assistant", "content": "I will look for repositories."},
+        {"role": "user", "content": "Actually, switch to news about OpenAI today."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "OpenAI", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"what_it_tests": "Routes the latest changed intent to news search instead of carrying over GitHub search."}
+    },
+    {
+      "id": "G10_multiturn_switch_account_tweets_to_topic_top_posts",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Show me Sam Altman's recent posts."},
+        {"role": "assistant", "content": "I will look at that account's timeline."},
+        {"role": "user", "content": "Instead, show the top posts about AI safety."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "AI safety", "search_type": "Top"}}]},
+      "metadata": {"what_it_tests": "Uses topic search and Top ranking after the user changes intent from an account timeline."}
+    }
+  ]
 }

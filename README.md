@@ -32,7 +32,7 @@ Nhiệm vụ bắt buộc:
 Bonus:
 
 - Action tool `send`: có confirmation trước khi gửi.
-- Extra tools: `policy`, `papers`, `paper_text`.
+- Extra tools: `policy`, `papers`, `paper_text`, `github_search` (tìm repository GitHub công khai).
 - **Small Local Model Challenge**: chạy agent bằng model local nhỏ (≤ 8B) qua Ollama — xem [Step 7](#step-7--bonus-challenge-small-local-model).
 
 
@@ -45,28 +45,28 @@ Bonus:
 **Setup**
 - [ ] `.env` có provider key + `TAVILY_API_KEY`, `FIRECRAWL_API_KEY`, `RAPIDAPI_KEY`
 - [ ] `python scripts/preflight_provider.py --provider openrouter` pass
-- [ ] `pytest` chạy được: contract test + example test xanh, TODO test đang `skipped`
+- [x] `pytest` chạy được offline: contract, example và tool unit tests
 
 **Prompt & tool declaration**
 - [ ] Chạy baseline `v0`, ghi vào `artifacts/version_log.csv`
 - [ ] Liệt kê các case FAIL của `v0` và gán mỗi case một loại lỗi (`wrong_tool`, `wrong_arg_value`, `missing_info`...)
 - [ ] `artifacts/system_prompt.md`: bỏ các chỉ dẫn xấu cố ý của starter (đoán thay vì hỏi, gửi không cần xác nhận, ép một bước)
-- [ ] `artifacts/system_prompt.md`: thêm rule routing (khi nào `timeline` / `social_search` / `lookup` / `fetch` / `clarify`)
+- [ ] `artifacts/system_prompt.md`: thêm rule routing (khi nào `timeline` / `social_search` / `lookup` / `fetch` / `clarify` / `github_search`)
 - [ ] `artifacts/tools.yaml`: viết lại `description` mỗi tool: làm gì, **khi nào dùng / khi nào không dùng**
 - [ ] `artifacts/tools.yaml`: mô tả rõ convention args (handle không có `@`, `topic=news` cho tin tức, `timeframe`, `search_type=Top|Latest`)
 - [ ] `artifacts/tools.yaml`: `send` mô tả rõ chỉ gửi khi user đã xác nhận (`confirmed=true`)
 - [ ] `v1`, `v2`, `v3`: mỗi version **một** giả thuyết, metric trước/sau trong `version_log.csv`
 
 **Tool mới**
-- [ ] `tools/<tên>/tool.py` + `TOOL.md` (frontmatter đúng contract trong `tools/README.md`)
-- [ ] Đăng ký trong `tools/__init__.py` (`TOOL_FUNCTIONS`) và `artifacts/tools.yaml`
-- [ ] Unit test cho tool mới trong `tests/test_tools_todo.py` (≥ 3 test)
-- [ ] Ít nhất 1 eval case trong `data/eval_group.json` kiểm tra model có route tới tool mới đúng lúc
+- [x] `tools/github_search/tool.py` + `TOOL.md` (frontmatter đúng contract trong `tools/README.md`)
+- [x] Đăng ký trong `tools/__init__.py` (`TOOL_FUNCTIONS`) và `artifacts/tools.yaml`
+- [x] Unit test cho tool mới trong `tests/test_tools_todo.py` (≥ 3 test)
+- [x] Eval case trong `data/eval_group.json` kiểm tra model route tới tool mới đúng lúc
 
 **Testing**
-- [ ] `data/eval_group.json`: case cho model (routing / args / boundary), xem Step 4
-- [ ] `tests/test_tools_todo.py`: unit test cho code của tool, xem Step 4b
-- [ ] `pytest`: 0 failed, 0 skipped
+- [x] `data/eval_group.json`: 10 case (5 single-turn, 5 multi-turn), xem Step 4
+- [x] `tests/test_tools_todo.py`: unit test cho code các tool, xem Step 4b
+- [x] `pytest`: 0 failed, 0 skipped
 
 **Demo & report**
 - [ ] UI chạy được + link dùng thử
@@ -90,7 +90,7 @@ starter_v0/
     conftest.py               # offline fixtures: block real network, fake_http, clean env
     test_tool_contract.py     # tools.yaml <-> code <-> eval stay in sync (given, keep green)
     test_tools_examples.py    # worked examples to copy
-    test_tools_todo.py        # TODO(student): tool unit test challenge
+    test_tools_todo.py        # offline unit tests for tools
   artifacts/
     system_prompt.md          # student edits
     tools.yaml                # student edits
@@ -130,6 +130,7 @@ Bonus tools:
 - `policy`: tìm trong company policy markdown nội bộ.
 - `papers`: tìm paper trên arXiv.
 - `paper_text`: tải PDF arXiv và trích text cục bộ.
+- `github_search`: tìm repository GitHub công khai theo từ khóa, ngôn ngữ, sao/fork hoặc thời gian cập nhật.
 
 Mỗi tool nằm trong thư mục riêng dưới `starter_v0/tools/<tool_name>/`.
 
@@ -242,7 +243,7 @@ Use hashes and run file paths from the eval output.
 
 ## Step 4 — Add Team Eval
 
-Add at least 5 cases to `data/eval_group.json`.
+Add 10 cases to `data/eval_group.json`: 5 single-turn and 5 multi-turn.
 
 Each case needs:
 
@@ -413,8 +414,8 @@ Submit `starter_v0/` with:
 - `artifacts/version_log.csv` with at least `v0`, `v1`, `v2`, `v3`
 - `artifacts/REPORT.md` (Phần A debate poster — xong trước 16:30; Phần B chi tiết — nộp sau)
 - `artifacts/poster.html` hoặc `artifacts/poster.svg` nếu team làm poster để debate (tùy chọn)
-- `data/eval_group.json` with at least 5 team cases
-- `tests/` (unit test cho tool mới; nếu làm challenge thì `test_tools_todo.py` không còn `skip`)
+- `data/eval_group.json` with 10 team cases (5 single-turn + 5 multi-turn)
+- `tests/` (unit tests; `test_tools_todo.py` has no skipped stubs)
 - `runs/*.json`
 - `analysis/*.csv` if you parsed run logs
 - `transcripts/*.transcript.json`
