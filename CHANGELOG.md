@@ -75,14 +75,16 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|---|
 | **`v0`** | team | baseline | **65.0%** (13/20) | 85.0% | 65.0% | Baseline starter code, chưa chỉnh sửa. |
 | **`v1`** | team | `system_prompt.md` | **100.0%** (20/20) | **100.0%** | **100.0%** | Tối ưu prompt, bổ sung quy tắc clarify/confirm, quy ước query ngắn gọn và few-shot examples. |
-| **`v2`** | team | prompt + `tools.yaml` + `github_search` | Chưa chạy live eval | Chưa chạy | Chưa chạy | Thêm tìm kiếm repository GitHub, cập nhật routing/declarations, 10 eval case và unit tests. Offline suite: 85 passed. |
+| **`v2`** | team | prompt + `tools.yaml` + `github_search` | 80.0% (16/20) base | 85% routing, 80% args | `runs/v2_B_base_openrouter_20261110T121453310623.json` | Bốn lỗi tập trung ở thiếu thông tin, xác nhận send và đổi ý định ở multi-turn. |
+| **`v3`** | team | `system_prompt.md` | 100.0% (20/20) base | 100% routing, 100% args, 100% multiturn | `runs/v3_B_base_openrouter_20261110T124406560221.json` | Làm rõ thứ tự hỏi lại/xác nhận và ưu tiên ý định mới nhất; group eval đang chạy. |
 
 ---
 
 ## 5. Kế hoạch các bước tiếp theo
 
-1. **Phiên bản `v2`:** Đã thêm `github_search`, mô tả routing trong prompt/schema, 10 group eval case (5 single-turn + 5 multi-turn), và unit tests. Cần chạy live group eval để có metric thực tế.
-2. **Giao diện & Báo cáo Showdown:**
+1. **Phiên bản `v2`:** Đã thêm `github_search`, mô tả routing trong prompt/schema, 10 group eval case (5 single-turn + 5 multi-turn), và unit tests.
+2. **Phiên bản `v3`:** Base eval đạt 20/20 sau khi xử lý các lỗi v2. Group eval 10 case đang chạy để đo khả năng routing và xử lý multi-turn cho GitHub search.
+3. **Giao diện & Báo cáo Showdown:**
    - Dựng giao diện Web UI bằng Streamlit (`app.py`).
    - Mở đường hầm Cloudflare Tunnel (`cloudflared`) để demo trực tiếp.
    - Hoàn thành `artifacts/REPORT.md` (Phần A trước 16:30, Phần B trước khi nộp bài).
