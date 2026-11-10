@@ -63,7 +63,7 @@ Research Agent thông minh đa nguồn: tự động tìm kiếm tin tức web, 
 | **v0** | baseline | Chưa sửa đổi gì, kiểm tra độ chính xác ban đầu | N/A | 65.0% (13/20) | `runs/v0_B_base_openai_20261110T100441663938.json` |
 | **v1** | `system_prompt.md` | Bỏ chỉ dẫn xấu (đoán mò, tự gửi), thêm rule clarify/confirm, quy ước query ngắn gọn và few-shots | 65.0% | **100.0%** (20/20) | `runs/v1_B_base_openai_20261110T104801876153.json` |
 | **v2** | `tools.yaml` + new tools (`github_search`, `deduplicate`) | Chuẩn hóa mô tả công cụ, tích hợp 2 tool mới và chạy suite mở rộng của nhóm | 100% v1 base | **100.0%** (10/10 group) | `runs/v2_B_group_openai_20261110T124529994452.json` |
-| **v3** | `system_prompt.md` & `app.py` | Tích hợp hoàn thiện toàn bộ hệ thống với UI Streamlit phục vụ Showdown | 100.0% | **100.0%** | `runs/v3_openrouter_...` |
+| **v3** | `tools.yaml` + `weather` | Tích hợp tool weather và kiểm thử bộ tool mở rộng trên base suite | 100.0% | **95.0%** (19/20 base, 100% routing) | `runs/v3_B_base_openai_20261110T144630583026.json` |
 
 ## B2. Failure Analysis
 
