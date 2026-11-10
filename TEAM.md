@@ -129,5 +129,33 @@ Mỗi thành viên thêm một mục theo mẫu dưới đây, tiêu đề là `
 
 ### ManhLinh - 2A202603539
 
-*(Thành viên tự điền MSSV, phần việc và đóng góp cụ thể của mình tại đây)*
+**Phần việc phụ trách:** Phát triển và tích hợp tool `github_search`, xây dựng eval case cho nhóm, viết unit test offline, và cải tiến system prompt dựa trên lỗi quan sát được từ các lần chạy eval.
 
+**Đóng góp cụ thể:**
+
+1. **Chạy và cải tiến các phiên bản agent trên nhánh cá nhân**
+   - **`v0`:** Baseline OpenRouter đạt **13/20 (65.0%)** trên base suite.
+   - **`v1`:** Tinh chỉnh system prompt; run có **14/18 case đo được đạt (77.8%)**, cùng **2 provider error** trên tổng 20 case. Vì vậy không tính đây là 16/20.
+   - **`v2`:** Bổ sung `github_search` và cải thiện prompt/tool declarations; run hoàn tất đạt **16/20 (80.0%)** trên base suite.
+   - **`v3`:** Làm rõ cách xử lý khi thiếu target, xác nhận trước hành động gửi, và ưu tiên ý định mới nhất trong hội thoại; đạt **20/20 (100%)** trên base suite.
+2. **Xây dựng tool `github_search`**
+   - Viết `TOOL.md` và triển khai gọi GitHub REST API để tìm repository công khai theo từ khóa.
+   - Hỗ trợ lọc ngôn ngữ (`language`), sắp xếp theo `stars`, `forks` hoặc `updated`, và giới hạn số kết quả (`limit`, 1–100).
+   - Kiểm tra đầu vào và ánh xạ kết quả thành các trường repository như tên, mô tả, URL, ngôn ngữ, sao, forks và thời điểm cập nhật.
+   - Đăng ký tool trong `tools/__init__.py` và khai báo schema/routing trong `artifacts/tools.yaml`, `artifacts/system_prompt.md`.
+3. **Bổ sung eval nhóm và kiểm thử**
+   - Thêm **10 eval case** `G01`–`G10`: 5 single-turn và 5 multi-turn, kiểm tra tìm repository, trích xuất bộ lọc/sắp xếp, thay đổi ý định và phân biệt GitHub search với web news.
+   - Hoàn thiện **18 unit test** trong `tests/test_tools_todo.py`, gồm test cho các tool hiện có và 4 test riêng cho `github_search` (happy path, input không hợp lệ và lỗi HTTP).
+   - Chạy offline test suite; kết quả xác nhận trên workspace là **85 passed, 0 skipped**.
+
+**Bằng chứng:**
+- Tool và schema: `starter_v0/tools/github_search/`, `starter_v0/tools/__init__.py`, `starter_v0/artifacts/tools.yaml`.
+- Prompt và eval nhóm: `starter_v0/artifacts/system_prompt.md`, `starter_v0/data/eval_group.json`.
+- Unit tests: `starter_v0/tests/test_tools_todo.py`.
+- Run v0: `starter_v0/runs/v0_B_base_openrouter_20261110T115945025570.json`.
+- Run v1: `starter_v0/runs/v1_B_base_openrouter_20261110T110025075652.json`.
+- Run v2: `starter_v0/runs/v2_B_base_openrouter_20261110T121453310623.json`.
+- Run v3: `starter_v0/runs/v3_B_base_openrouter_20261110T125318235690.json`.
+- Các commit trên nhánh `Linh`: `4821deb` (`github_search`) và `5c59f8d` (`submit v3`).
+
+**Điều mình học được:** Kết quả eval cần được ghi cùng provider error để metric không gây hiểu nhầm; mô tả tool/schema và quy tắc prompt đều ảnh hưởng đến routing; unit test offline giúp xác nhận validation, request và ánh xạ response mà eval của model không kiểm tra.
