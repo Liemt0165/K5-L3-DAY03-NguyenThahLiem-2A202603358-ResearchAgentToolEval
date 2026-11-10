@@ -1,4 +1,4 @@
-# Research tool declarations - v2 work in progress.
+﻿# Research tool declarations - v2 work in progress.
 # Keep tool names aligned with tools/__init__.py and eval expectations.
 tools:
   # ---------------- Core tools ----------------
@@ -128,3 +128,21 @@ tools:
               source: {type: string}
             required: [url]
       required: [items]
+
+  - name: github_search
+    description: "Tìm kiếm các kho lưu trữ mã nguồn (repositories) công khai trên GitHub theo từ khóa hoặc chủ đề."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa tìm kiếm repository hoặc chủ đề"}
+        sort: {type: string, enum: [stars, updated, forks], default: "stars", description: "Sắp xếp theo 'stars', 'updated', hoặc 'forks'"}
+        max_results: {type: integer, default: 5, description: "Số lượng repository cần lấy"}
+      required: [query]
+
+  - name: weather
+    description: "Tra cứu thông tin thời tiết hiện tại tại một địa điểm hoặc thành phố cụ thể."
+    parameters:
+      type: object
+      properties:
+        location: {type: string, default: "", description: "Tên thành phố hoặc địa điểm cần xem thời tiết (ví dụ: 'Hanoi', 'Tokyo', 'London')"}
+      required: [location]

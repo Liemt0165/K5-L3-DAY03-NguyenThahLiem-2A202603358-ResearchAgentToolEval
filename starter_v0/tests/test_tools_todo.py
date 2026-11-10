@@ -152,3 +152,31 @@ def test_send_non_boolean_confirmation_never_calls_network(monkeypatch, fake_htt
     result = T["send"](text="Draft", confirmed=confirmed)
     assert result["status"] == "needs_confirmation"
     assert calls == []
+
+# ---------------- weather (tool mới) ----------------
+
+def test_weather_happy_path(fake_http) -> None:
+    calls = fake_http(FakeResponse({
+        "current_condition": [{"temp_C": "28", "windspeedKmph": "12", "weatherDesc": [{"value": "Partly cloudy"}]}],
+        "nearest_area": [{"areaName": [{"value": "Hanoi"}], "country": [{"value": "Vietnam"}]}],
+    }))
+    result = T["weather"](location="Hanoi")
+    assert result["status"] == "success"
+    assert "Hanoi, Vietnam" in result["location"]
+    assert result["temperature"] == "28°C"
+    assert result["weather_condition"] == "Partly cloudy"
+    assert len(calls) == 1
+
+
+def test_weather_empty_location_returns_error(fake_http) -> None:
+    calls = fake_http(FakeResponse({}))
+    result = T["weather"](location="   ")
+    assert result["error"] == "ValueError"
+    assert calls == []
+
+
+def test_weather_http_error_returns_error_dict(fake_http) -> None:
+    calls = fake_http(requests.HTTPError("404 Not Found"))
+    result = T["weather"](location="UnknownPlace")
+    assert "error" in result
+    assert len(calls) == 1
