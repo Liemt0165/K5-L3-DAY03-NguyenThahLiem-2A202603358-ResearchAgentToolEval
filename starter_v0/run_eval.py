@@ -101,7 +101,12 @@ def normalize_value(value: Any) -> Any:
     if isinstance(value, str):
         return value.strip().lower()
     if isinstance(value, list):
-        return sorted(normalize_value(item) for item in value)
+        # Structured items can carry meaningful order (e.g. keep-first dedup).
+        # Python cannot sort dictionaries; preserve these lists and compare
+        # their objects exactly. Keep legacy order-insensitive scalar handling.
+        if any(isinstance(item, (dict, list)) for item in value):
+            return value
+        return sorted((normalize_value(item) for item in value), key=lambda item: (type(item).__name__, repr(item)))
     return value
 
 
@@ -288,7 +293,7 @@ def main() -> None:
     results: list[dict[str, Any]] = []
     for case in cases:
         print(f"Running {case['id']}...", flush=True)
-        agent = ResearchAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
+        agent = ResearchAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model, blocked_tools={"send"})
         try:
             tool_choice = None if case["expect"].get("no_tool") else "required"
             run = agent.run(case_messages(case), tool_choice=tool_choice)
@@ -342,6 +347,7 @@ def main() -> None:
         "suite": args.suite,
         "provider": args.provider,
         "model": selected_model,
+        "execution_policy": {"blocked_tools": ["send"], "note": "Tool calls are graded but Telegram publishing is disabled in eval."},
         "system_prompt": str(args.system_prompt),
         "tools": str(args.tools),
         "eval_cases": str(args.eval_cases),
