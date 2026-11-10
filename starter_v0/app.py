@@ -19,11 +19,28 @@ from chat import (
     trim_history,
     write_transcript,
 )
+
+r"""Streamlit interface for the current research agent artifacts.
+
+Run: .venv\Scripts\python -m streamlit run app.py
+"""
+from __future__ import annotations
+
+import json
+import os
+from datetime import datetime
+from pathlib import Path
+from uuid import uuid4
+
+import streamlit as st
+
+from chat import now_iso, run_model_tool_loop, trim_history, write_transcript
 from env_loader import load_lab_env
 from providers import make_provider
 from tools import load_tool_declarations, to_openai_tools
 from versioning import artifact_version_dict, build_artifact_version
 
+<<<<<<< HEAD
 load_lab_env(ROOT)
 
 st.set_page_config(
@@ -623,7 +640,6 @@ def main() -> None:
 
     with tab_dashboard:
         render_eval_dashboard_tab()
-
 
 if __name__ == "__main__":
     main()

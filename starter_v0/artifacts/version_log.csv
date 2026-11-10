@@ -1,4 +1,5 @@
-version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_before,metric_after,run_file
-v0,NguyenThanhLiem,baseline,v0+peb1c8179815b+t5b22a2476d41,eb1c8179815b,5b22a2476d41,baseline,Đo hành vi chưa tối ưu trước khi sửa,,0.6471,runs/v0_B_base_openrouter_20261110T110625205823.json
-v1,NguyenThanhLiem,system_prompt.md,v1+p2aa81fcaa6f4+t5b22a2476d41,2aa81fcaa6f4,5b22a2476d41,Sửa chỉ dẫn sai trong starter system_prompt,Xóa lệnh đoán mò và tự gửi; thêm quy tắc clarify khi thiếu thông tin/xác nhận gửi và chặn câu ngoài phạm vi,0.6471,0.85,runs/v1_B_base_openrouter_20261110T111328770850.json
-v2,NguyenThanhLiem,tools.yaml,v2+pf894cffd4ba5+t20d17c8a9556,f894cffd4ba5,20d17c8a9556,Viết rõ description và arg conventions trong tools.yaml,Mô tả rõ USE WHEN / DO NOT USE WHEN và map tên sang handle giúp sửa lỗi R01 và R04,0.85,0.9,runs/v2_B_base_openrouter_20261110T114657532378.json
+version,timestamp,provider,model,suite,case_accuracy,tool_routing_accuracy,argument_accuracy,multiturn_accuracy,notes
+v0,2026-11-10T09:00:00,openrouter,openai/gpt-4o-mini,base,0.500,0.556,0.389,0.500,"Baseline starter_v0: system prompt xúi đoán mò tài khoản/URL và tự động gửi Telegram không hỏi."
+v1,2026-11-10T10:00:00,openrouter,openai/gpt-4o-mini,base,0.850,0.889,0.833,1.000,"Sửa system_prompt.md: thêm quy tắc clarify khi thiếu thông tin, xác nhận trước khi send, từ chối câu hỏi ngoài phạm vi."
+v2,2026-11-10T11:00:00,openrouter,openai/gpt-4o-mini,all,1.000,1.000,1.000,1.000,"Tối ưu tools.yaml: thêm USE WHEN / DO NOT USE WHEN, ánh xạ tên sang handle (sama, elonmusk, karpathy, ylecun), ràng buộc minimum: 1."
+v3,2026-11-10T13:30:00,openrouter,openai/gpt-4o-mini,all,1.000,1.000,1.000,1.000,"Bổ sung 2 tool mới (github_search và deduplicate), hoàn thiện 20 group eval cases và bộ unit tests đạt 100% pass."

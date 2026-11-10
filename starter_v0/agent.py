@@ -22,11 +22,13 @@ class ResearchAgent:
         system_prompt: str,
         tools: list[dict[str, Any]] | None = None,
         model: str | None = None,
+        blocked_tools: set[str] | None = None,
     ) -> None:
         self.provider = provider
         self.system_prompt = system_prompt
         self.tools = tools or []
         self.model = model
+        self.blocked_tools = blocked_tools or set()
 
     def run(self, user_messages: list[dict[str, str]], *, tool_choice: Any | None = None) -> AgentRun:
         messages = [{"role": "system", "content": self.system_prompt}, *user_messages]
@@ -39,6 +41,10 @@ class ResearchAgent:
         )
         results: list[dict[str, Any]] = []
         for call in response.tool_calls:
+            if call.name in self.blocked_tools:
+                results.append({"tool": call.name, "args": call.args,
+                                "result": {"status": "execution_disabled", "reason": "Evaluation does not publish messages."}})
+                continue
             func = TOOL_FUNCTIONS.get(call.name)
             if not func:
                 results.append({"tool": call.name, "error": "unknown_tool"})

@@ -1,5 +1,9 @@
-"""Tool Unit Test Challenge — completed with 0 skipped, 0 failed."""
+"""Completed offline tool behavior tests; no real requests or credentials."""
 from __future__ import annotations
+
+import copy
+import pytest
+import requests
 
 from conftest import FakeResponse
 from tools import TOOL_FUNCTIONS
@@ -13,6 +17,7 @@ timeline_tool = TOOL_FUNCTIONS["timeline"]
 social_search_tool = TOOL_FUNCTIONS["social_search"]
 policy_tool = TOOL_FUNCTIONS["policy"]
 github_search_tool = TOOL_FUNCTIONS["github_search"]
+deduplicate_tool = TOOL_FUNCTIONS["deduplicate"]
 
 
 # ---------------- clarify ----------------
@@ -50,11 +55,11 @@ def test_format_thread_numbers_items() -> None:
     assert chunks[1].startswith("2/ ")
 
 
-def test_format_empty_items_does_not_crash() -> None:
-    res_none = format_tool(items=None, template="sections")
-    res_empty = format_tool(items=[], template="bullets")
-    assert res_none["item_count"] == 0
-    assert res_empty["item_count"] == 0
+@pytest.mark.parametrize("items", [None, []])
+def test_format_empty_items_does_not_crash(items) -> None:
+    result = format_tool(items=items)
+    assert result["item_count"] == 0
+    assert result["markdown"] == ""
 
 
 # ---------------- send (guardrail) ----------------
@@ -82,16 +87,28 @@ def test_send_confirmed_without_env_returns_error_and_no_request(fake_http) -> N
     assert "TELEGRAM_BOT_TOKEN" in result["message"]
 
 
+@pytest.mark.parametrize("confirmed", ["false", "true", 1, [], {}])
+def test_send_non_boolean_confirmation_never_calls_network(monkeypatch, fake_http, confirmed) -> None:
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "fake-token")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "123")
+    calls = fake_http(FakeResponse({"ok": True}))
+    result = send_tool(text="Draft", confirmed=confirmed)
+    assert result["status"] == "needs_confirmation"
+    assert calls == []
+
+
 # ---------------- lookup ----------------
 
 def test_lookup_without_timeframe_omits_time_range(monkeypatch, fake_http) -> None:
     monkeypatch.setenv("TAVILY_API_KEY", "test-key")
     calls = fake_http(FakeResponse({"results": []}))
 
-    lookup_tool(query="AI", topic="general", timeframe=None)
+    result = lookup_tool(query="AI", topic="general", timeframe=None)
 
     assert len(calls) == 1
     assert "time_range" not in calls[0]["json"]
+    assert calls[0]["json"]["query"] == "AI"
+    assert result["items"] == []
 
 
 # ---------------- fetch ----------------
@@ -130,6 +147,13 @@ def test_fetch_truncates_markdown_to_4000_chars(monkeypatch, fake_http) -> None:
     assert len(result["items"][0]["summary"]) == 4000
 
 
+def test_fetch_timeout_returns_error_dict(monkeypatch, fake_http) -> None:
+    monkeypatch.setenv("FIRECRAWL_API_KEY", "fake-key")
+    calls = fake_http(requests.Timeout("test timeout"))
+    assert fetch_tool(url="https://example.com")["error"] == "Timeout"
+    assert len(calls) == 1
+
+
 # ---------------- timeline / social_search ----------------
 
 def test_timeline_respects_limit_and_skips_items_without_id(monkeypatch, fake_http) -> None:
@@ -148,15 +172,17 @@ def test_timeline_respects_limit_and_skips_items_without_id(monkeypatch, fake_ht
         assert item["url"] == f"https://x.com/sama/status/{100 + idx}"
 
 
-def test_social_search_passes_search_type(monkeypatch, fake_http) -> None:
+@pytest.mark.parametrize("search_type", ["Top", "Latest"])
+def test_social_search_passes_search_type(monkeypatch, fake_http, search_type) -> None:
     monkeypatch.setenv("RAPIDAPI_KEY", "rapid-key")
-    calls = fake_http(FakeResponse({"timeline": []}))
+    calls = fake_http(FakeResponse({"timeline": [{"tweet_id": "1", "screen_name": "NASA", "text": "News"}]}))
 
-    result = social_search_tool(query="OpenAI", search_type="Top", limit=5)
+    result = social_search_tool(query="OpenAI", search_type=search_type, limit=1)
 
     assert len(calls) == 1
-    assert calls[0]["params"] == {"query": "OpenAI", "search_type": "Top"}
-    assert result["search_type"] == "Top"
+    assert calls[0]["params"] == {"query": "OpenAI", "search_type": search_type}
+    assert result["search_type"] == search_type
+    assert len(result["items"]) == 1
 
 
 # ---------------- policy (local knowledge + trust boundary) ----------------
@@ -167,14 +193,14 @@ def test_policy_empty_query_returns_no_results() -> None:
 
 
 def test_policy_area_filter_only_returns_that_area() -> None:
-    result = policy_tool(query="API key customer data prompt", policy_area="data_privacy")
+    result = policy_tool(query="API key customer data prompt", policy_area="data_privacy", top_k=5)
     assert len(result["results"]) >= 1
     for item in result["results"]:
         assert item["policy_area"] == "data_privacy"
 
 
 def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
-    result = policy_tool(query="viral tweet social source citation", policy_area="source_citation", top_k=5)
+    result = policy_tool(query="viral tweet social source citation", policy_area="source_citation", top_k=20)
     assert len(result["results"]) >= 1
     all_untrusted = [line for item in result["results"] for line in item.get("untrusted_text", [])]
     all_facts = " ".join(item.get("facts", "") for item in result["results"])
@@ -182,7 +208,32 @@ def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
     assert "ignore previous" not in all_facts.lower()
 
 
-# ---------------- YOUR NEW TOOL(S): github_search ----------------
+# ---------------- NEW TOOL 1: deduplicate ----------------
+
+def test_deduplicate_does_not_modify_input_metadata() -> None:
+    items = [{"url": "https://example.com/a#first", "title": "First"}, {"url": "https://example.com/a"}]
+    original = copy.deepcopy(items)
+    result = deduplicate_tool(items=items)
+    assert items == original
+    assert result["items"] == [original[0]]
+    assert result["items"][0] is not items[0]
+
+
+def test_deduplicate_bad_item_after_valid_item_returns_no_partial_success() -> None:
+    result = deduplicate_tool(items=[{"url": "https://example.com/a"}, {"title": "no URL"}])
+    assert result["error"] == "ValueError"
+    assert "items" not in result
+
+
+def test_deduplicate_is_idempotent() -> None:
+    items = [{"url": "https://example.com/a?utm_source=x"}, {"url": "https://example.com/a"}]
+    first = deduplicate_tool(items=items)
+    second = deduplicate_tool(items=first["items"])
+    assert second["items"] == first["items"]
+    assert second["removed_count"] == 0
+
+
+# ---------------- NEW TOOL 2: github_search ----------------
 
 def test_my_new_tool_happy_path(fake_http) -> None:
     calls = fake_http(FakeResponse({
@@ -221,7 +272,6 @@ def test_my_new_tool_bad_input_from_model(fake_http) -> None:
     assert empty_res["error"] == "ValueError"
     assert calls == []
 
-    # Invalid sort enum and string max_results fall back safely when query is non-empty
     valid_res = github_search_tool(query="mcp", sort="invalid_enum", max_results="not_a_number")
     assert valid_res["sort"] == "stars"
     assert calls[0]["params"]["per_page"] == 5

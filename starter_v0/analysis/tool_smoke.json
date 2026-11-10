@@ -1,0 +1,26 @@
+[
+  {
+    "tool": "lookup",
+    "ok": true,
+    "item_count": 1,
+    "error": null
+  },
+  {
+    "tool": "fetch",
+    "ok": true,
+    "item_count": 1,
+    "error": null
+  },
+  {
+    "tool": "timeline",
+    "ok": false,
+    "item_count": 0,
+    "error": "HTTPError"
+  },
+  {
+    "tool": "social_search",
+    "ok": false,
+    "item_count": 0,
+    "error": "HTTPError"
+  }
+]
