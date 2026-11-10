@@ -1,1 +1,3 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_before,metric_after,run_file
+v0,NguyenThanhLiem,baseline,v0+peb1c8179815b+t5b22a2476d41,eb1c8179815b,5b22a2476d41,baseline,Đo hành vi chưa tối ưu trước khi sửa,,0.6471,runs/v0_B_base_openrouter_20261110T110625205823.json
+v1,NguyenThanhLiem,system_prompt.md,v1+p2aa81fcaa6f4+t5b22a2476d41,2aa81fcaa6f4,5b22a2476d41,Sửa chỉ dẫn sai trong starter system_prompt,Xóa lệnh đoán mò và tự gửi; thêm quy tắc clarify khi thiếu thông tin/xác nhận gửi và chặn câu ngoài phạm vi,0.6471,0.85,runs/v1_B_base_openrouter_20261110T111328770850.json
