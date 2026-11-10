@@ -91,3 +91,4 @@
    - Dựng giao diện Web UI bằng Streamlit (`app.py`).
    - Mở đường hầm Cloudflare Tunnel (`cloudflared`) để demo trực tiếp.
    - Hoàn thành `artifacts/REPORT.md` (Phần A trước 16:30, Phần B trước khi nộp bài).
+

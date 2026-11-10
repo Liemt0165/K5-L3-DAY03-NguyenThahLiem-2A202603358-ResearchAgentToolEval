@@ -1,7 +1,298 @@
 {
-  "dataset_id": "day04_v2_research_group",
+  "dataset_id": "day03_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 case nhóm v2: 5 single-turn + 5 multi-turn. Viết trước khi chạy; không thay expect để khớp output.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_deduplicate_provided_sources",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_tool",
+      "metadata": {
+        "what_it_tests": "Chọn tool mới khi đã có item; truyền nguyên dữ liệu để tool tự lọc, không tự chuẩn hóa trước."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "items": [
+                {
+                  "url": "https://example.com/story?utm_source=mail",
+                  "title": "First"
+                },
+                {
+                  "url": "https://example.com/story",
+                  "title": "Second"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "query": "Chỉ lọc các nguồn URL trùng, giữ item đầu tiên. Không tìm thêm hay định dạng. Danh sách: [{\"url\": \"https://example.com/story?utm_source=mail\", \"title\": \"First\"}, {\"url\": \"https://example.com/story\", \"title\": \"Second\"}]"
+    },
+    {
+      "id": "G02_missing_account",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "missing_info",
+      "metadata": {
+        "what_it_tests": "Không tự chọn người khi user chưa chỉ định tài khoản X."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "query": "Lấy 4 bài mới nhất trên X giúp tôi; tôi chưa nói tài khoản nào."
+    },
+    {
+      "id": "G03_internal_privacy_policy",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_tool",
+      "metadata": {
+        "what_it_tests": "Chính sách nội bộ dùng local policy, không tìm web."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "data_privacy"
+            }
+          }
+        ]
+      },
+      "query": "Tra trong chính sách nội bộ công ty: có được đưa dữ liệu khách hàng bí mật vào công cụ AI bên ngoài không?"
+    },
+    {
+      "id": "G04_popular_social_posts",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "metadata": {
+        "what_it_tests": "Phân biệt Top và Latest; giữ số bài user yêu cầu."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Anthropic",
+              "search_type": "Top",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "query": "Tìm 3 tweet phổ biến nhất về Anthropic trên X."
+    },
+    {
+      "id": "G05_explain_tool_capabilities",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "unnecessary_tool",
+      "metadata": {
+        "what_it_tests": "Giải thích chức năng tool mà không gọi tìm kiếm hoặc thao tác dữ liệu."
+      },
+      "expect": {
+        "no_tool": true
+      },
+      "query": "Bạn có thể giải thích các công cụ nghiên cứu bạn có không? Chỉ giới thiệu, chưa cần thực hiện nghiên cứu."
+    },
+    {
+      "id": "G06_correct_account_and_limit",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "metadata": {
+        "what_it_tests": "Lượt sửa mới nhất thay tài khoản và số bài cũ."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "esa",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Lấy 8 bài mới nhất của @NASA trên X."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn lấy 8 bài từ NASA."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang @esa và chỉ lấy 2 bài mới nhất thôi."
+        }
+      ]
+    },
+    {
+      "id": "G07_carryover_web_timeframe",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "metadata": {
+        "what_it_tests": "Đổi chủ đề nhưng giữ tìm web topic news và tháng từ ngữ cảnh."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức web về batteries trong tháng này."
+        },
+        {
+          "role": "assistant",
+          "content": "Tôi sẽ tìm tin web với topic=news và timeframe=month."
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề thành robotics, giữ nguyên nguồn web và khoảng thời gian."
+        }
+      ]
+    },
+    {
+      "id": "G08_clarify_then_article_url",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "missing_info",
+      "metadata": {
+        "what_it_tests": "Sau hỏi thiếu URL, dùng URL mới và đọc bài thay vì tiếp tục hỏi."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com"
+            }
+          }
+        ]
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đọc và tóm tắt bài này cho tôi."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn gửi URL bài viết giúp tôi nhé."
+        },
+        {
+          "role": "user",
+          "content": "URL đây: https://example.com"
+        }
+      ]
+    },
+    {
+      "id": "G09_deduplicate_after_correction",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "metadata": {
+        "what_it_tests": "Dùng tool mới với danh sách sửa mới nhất, bỏ danh sách cũ."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "items": [
+                {
+                  "url": "https://example.com/story?utm_source=mail",
+                  "title": "First"
+                },
+                {
+                  "url": "https://example.com/story",
+                  "title": "Second"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Lọc nguồn URL trùng trong danh sách [{\"url\":\"https://example.org/old\"}]."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn lọc danh sách nguồn đã có."
+        },
+        {
+          "role": "user",
+          "content": "Bỏ danh sách cũ. Chỉ dùng danh sách mới sau và gọi công cụ lọc URL trùng, giữ item đầu tiên: [{\"url\": \"https://example.com/story?utm_source=mail\", \"title\": \"First\"}, {\"url\": \"https://example.com/story\", \"title\": \"Second\"}]"
+        }
+      ]
+    },
+    {
+      "id": "G10_switch_web_to_social",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_tool",
+      "metadata": {
+        "what_it_tests": "Khi chuyển từ web sang X, chỉ tìm tweet mới với count và topic mới nhất."
+      },
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "robotics",
+              "search_type": "Latest",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm tin web mới về OpenAI trong tuần này."
+        },
+        {
+          "role": "assistant",
+          "content": "Tôi sẽ tìm tin web về OpenAI."
+        },
+        {
+          "role": "user",
+          "content": "Không tìm web nữa. Chỉ tìm 2 tweet mới nhất về robotics trên X."
+        }
+      ]
+    }
+  ]
 }

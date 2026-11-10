@@ -16,62 +16,62 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Gửi một câu hỏi cho người dùng khi thiếu thông tin hoặc cần xác nhận trước khi gửi tin."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Câu hỏi gửi user"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text để xin thông tin thiếu, 'yes_no' nếu cần user xác nhận"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn nếu có"}
       required: [question]
 
   - name: timeline
-    description: "Lấy các bài đăng gần đây."
+    description: "Lấy bài đăng của một người/tài khoản cụ thể. Không dùng để tìm kiếm theo chủ đề chung"
     parameters:
       type: object
       properties:
         screenname: {type: string, default: "", description: "Tên tài khoản"}
-        limit: {type: integer, default: 5, description: "Số lượng"}
+        limit: {type: integer, default: 5, description: "Số lượng bài cần lấy"}
       required: [screenname]
 
   - name: social_search
-    description: "Tìm trên mạng xã hội."
+    description: "Tìm bài đăng theo CHỦ ĐỀ/TỪ KHÓA. Không dùng khi lấy bài của một người/tài khoản cụ thể."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Từ khóa"}
+        query: {type: string, default: "", description: "Từ khóa/chủ đề tìm kiếm"}
         search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Cách sắp xếp"}
-        limit: {type: integer, default: 5, description: "Số lượng"}
+        limit: {type: integer, default: 5, description: "Số lượng bài cần lấy"}
       required: [query]
 
   - name: lookup
-    description: "Tra cứu thông tin trên internet."
+    description: "Tra cứu thông tin trên web hoặc tin tức. Không dùng khi người dùng đã đưa sẵn URL cụ thể"
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Truy vấn"}
-        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại"}
-        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian"}
+        query: {type: string, default: "", description: "Từ khóa truy vấn"}
+        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại bài viết vừa tìm được"}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian tìm kiếm"}
         max_results: {type: integer, default: 5, description: "Số kết quả"}
       required: [query]
 
   - name: fetch
-    description: "Lấy nội dung từ một địa chỉ."
+    description: "Đọc nội dung từ một link URL cụ thể. Không dùng khi chưa có link cụ thể (dùng clarify)."
     parameters:
       type: object
       properties:
-        url: {type: string, default: "", description: "Địa chỉ"}
+        url: {type: string, default: "", description: "Đường link URL đầy đủ"}
       required: [url]
 
   - name: format
-    description: "Trình bày dữ liệu đã có thành văn bản."
+    description: "Định dạng các dữ liệu đã tìm được thành bản tin markdown digest."
     parameters:
       type: object
       properties:
         items:
           type: array
           default: []
-          description: "Danh sách item"
+          description: "Danh sách các mục tin thu thập được"
           items:
             type: object
             properties:
@@ -80,46 +80,75 @@ tools:
               source: {type: string}
               summary: {type: string}
               section: {type: string}
-        template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Khuôn"}
-        headline: {type: string, default: "", description: "Tiêu đề"}
+        template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Mẫu khuôn định dạng"}
+        headline: {type: string, default: "", description: "Tiêu đề bản tin"}
       required: [items, template]
 
   # ---------------- Bonus tools ----------------
   - name: send
-    description: "Gửi một đoạn văn bản đi."
+    description: "Gửi tin lên Telegram. CHỈ DÙNG khi người dùng ĐÃ xác nhận gửi (confirmed=true)."
     parameters:
       type: object
       properties:
-        text: {type: string, default: "", description: "Nội dung"}
-        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
+        text: {type: string, default: "", description: "Nội dung văn bản cần gửi"}
+        confirmed: {type: boolean, default: false, description: "Bắt buộc true khi người dùng đã xác nhận đồng ý gửi"}
       required: [text]
 
   - name: policy
-    description: "Tìm trong tài liệu nội bộ."
+    description: "Tìm kiếm trong tài liệu quy định và chính sách nội bộ công ty."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Truy vấn"}
-        policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Nhóm"}
-        top_k: {type: integer, default: 3, description: "Số mục"}
+        query: {type: string, default: "", description: "Từ khóa tra cứu chính sách"}
+        policy_area: {type: string, enum: [all, ai_research, source_citation, data_privacy, external_publishing, tool_usage], default: "all", description: "Lĩnh vực chính sách"}
+        top_k: {type: integer, default: 3, description: "Số lượng mục liên quan nhất"}
       required: [query]
 
   - name: papers
-    description: "Tìm bài báo khoa học."
+    description: "Tìm kiếm bài báo nghiên cứu khoa học trên arXiv theo từ khóa."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Từ khóa"}
-        max_results: {type: integer, default: 5, description: "Số lượng"}
-        sort_by: {type: string, enum: [relevance, lastUpdatedDate, submittedDate], default: "relevance", description: "Sắp xếp"}
+        query: {type: string, default: "", description: "Từ khóa tìm kiếm bài báo"}
+        max_results: {type: integer, default: 5, description: "Số lượng bài báo cần lấy"}
+        sort_by: {type: string, enum: [relevance, lastUpdatedDate, submittedDate], default: "relevance", description: "Cách sắp xếp"}
       required: [query]
 
   - name: paper_text
-    description: "Lấy nội dung text của một bài báo."
+    description: "Tải và trích xuất nội dung văn bản từ file PDF bài báo arXiv."
     parameters:
       type: object
       properties:
-        arxiv_url: {type: string, default: "", description: "ID hoặc địa chỉ"}
-        max_pages: {type: integer, default: 5, description: "Số trang"}
-        max_chars: {type: integer, default: 8000, description: "Số ký tự"}
+        arxiv_url: {type: string, default: "", description: "ID hoặc đường link arXiv của bài báo"}
+        max_pages: {type: integer, default: 5, description: "Số trang tối đa"}
+        max_chars: {type: integer, default: 8000, description: "Số ký tự tối đa"}
       required: [arxiv_url]
+
+  # ---------------- Team Added Tools ----------------
+  - name: github_search
+    description: "Tìm kiếm các kho lưu trữ mã nguồn (repositories) công khai trên GitHub theo từ khóa hoặc chủ đề."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa tìm kiếm repository hoặc chủ đề"}
+        sort: {type: string, enum: [stars, updated, forks], default: "stars", description: "Sắp xếp theo 'stars', 'updated', hoặc 'forks'"}
+        max_results: {type: integer, default: 5, description: "Số lượng repository cần lấy"}
+      required: [query]
+
+  - name: deduplicate
+    description: "Loại bỏ các nguồn URL trùng lặp khỏi danh sách bài viết/nguồn đã thu thập trước khi tổng hợp bản tin."
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Danh sách các item nguồn cần lọc trùng"
+          items:
+            type: object
+            properties:
+              url: {type: string, description: "URL nguồn"}
+              title: {type: string}
+              summary: {type: string}
+              source: {type: string}
+            required: [url]
+      required: [items]
